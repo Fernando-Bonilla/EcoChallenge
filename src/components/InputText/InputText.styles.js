@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         fontSize: 16,
         color: "#333",
+        minWidth: 200,
     }
 })
 

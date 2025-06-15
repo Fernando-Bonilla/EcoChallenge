@@ -6,7 +6,7 @@ import { RootStack } from './src/routes/RootStack';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>¡Hola desde Expo!</Text>      
+      {/* <Text>¡Hola desde Expo!</Text>       */}
       <RootStack/>
       <StatusBar style="auto" />
     </View>

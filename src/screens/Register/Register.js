@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Button } from "../../components/Button/Button";
 import { InputText } from "../../components/InputText/InputText";
 
+import styles from "./Register.styles";
+
 export const Register = (navigation) => {
 
     const [userName , setUserName] = useState("");
@@ -50,7 +52,7 @@ export const Register = (navigation) => {
     };
 
     return(
-        <View>
+        <View style={styles.view}>
             <KeyboardAvoidingView>
                 <InputText
                     placeHolder="Nombre Usuario"
