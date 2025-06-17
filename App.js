@@ -2,24 +2,19 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { UserProvider } from './src/Context/UserContext';
 import RootStack from './src/routes/RootStack';
-
 
 console.log("Renderiza App.js", App);
 
 export default function App() {
-  return (
-    /* <>
-      
-      <StatusBar style="auto" />
-      <RootStack/>
-      
-    </> */
-    
-    <View style={styles.container}>      
-      <RootStack/>
-      <StatusBar style="auto" />
-    </View>
+  return (    
+    <UserProvider>
+      <View style={styles.container}>      
+        <RootStack/>
+        <StatusBar style="auto" />
+      </View>
+    </UserProvider>
   );
 }
 

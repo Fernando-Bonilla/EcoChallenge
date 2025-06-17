@@ -7,11 +7,14 @@ import LoginRegister from "../screens/LoginRegister/LoginRegister";
 import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import Home from "../screens/Home/Home";
+import { useUser } from "../Context/UserContext";
 
 //const Stack = createNativeStackNavigator();
 const Stack = createStackNavigator();
 
 const RootStack = () => {
+    const {user} = useUser();
+
     return(
         <NavigationContainer>
             <Stack.Navigator initialRouteName="LoginRegister">
@@ -33,7 +36,11 @@ const RootStack = () => {
                 <Stack.Screen
                     name="Home"
                     component={Home}
-                    options={{title:"Home"}}
+                    options={{
+                        title: user ? `Hola ${user.userName}` : "Bienvenido",
+                        headerLeft: () => null,
+                    }}
+                    
                 />
 
             </Stack.Navigator>

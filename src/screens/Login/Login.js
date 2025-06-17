@@ -4,11 +4,13 @@ import InputText from "../../components/InputText/InputText";
 import { View, KeyboardAvoidingView, Alert } from "react-native";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUser } from "../../Context/UserContext";
 
 import styles from "../LoginRegister/LoginRegister.styles";
 
 const Login = ({navigation}) => {
     
+    const {setUser} = useUser(); // aca usamos el setUser para guardar los datos del user en la sesion actual
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -56,6 +58,7 @@ const Login = ({navigation}) => {
             }
             
             // Si los datos son correctos lo mandamos a la HomePage
+            setUser(user); // aca guardamos los datos del user actual
             navigation.navigate("Home");            
             
         }
