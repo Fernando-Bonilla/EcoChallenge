@@ -16,9 +16,7 @@ export default function App() {
       
     </> */
     
-    <View style={styles.container}>
-      <Text>¡Hola desde Expo!</Text>      
-      <Text>¡chuipala!</Text>
+    <View style={styles.container}>      
       <RootStack/>
       <StatusBar style="auto" />
     </View>
