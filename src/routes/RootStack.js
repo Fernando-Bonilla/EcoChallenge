@@ -1,15 +1,17 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from "@react-navigation/native";
 
-import { LoginRegister } from "../screens/LoginRegister/LoginRegister";
-import { Login } from "../screens/Login/Login";
-import { Register } from "../screens/Register/Register";
-import { Home } from "../screens/Home/Home";
+import LoginRegister from "../screens/LoginRegister/LoginRegister";
+import Login from "../screens/Login/Login";
+import Register from "../screens/Register/Register";
+import Home from "../screens/Home/Home";
 
-const Stack = createNativeStackNavigator();
+//const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
-export const RootStack = () => {
+const RootStack = () => {
     return(
         <NavigationContainer>
             <Stack.Navigator initialRouteName="LoginRegister">
@@ -38,3 +40,5 @@ export const RootStack = () => {
         </NavigationContainer>
     );
 };
+
+export default RootStack;

@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Alert, KeyboardAvoidingView } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { useState } from "react";
-import { Button } from "../../components/Button/Button";
-import { InputText } from "../../components/InputText/InputText";
+
+import Button from "../../components/Button/Button";
+import InputText from "../../components/InputText/InputText";
 
 import styles from "./Register.styles";
 
-export const Register = (navigation) => {
+const Register = ({navigation}) => {
 
     const [userName , setUserName] = useState("");
     const [email, setEmail] = useState("");
@@ -53,7 +53,7 @@ export const Register = (navigation) => {
 
     return(
         <View style={styles.view}>
-            <KeyboardAvoidingView>
+            <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
                 <InputText
                     placeHolder="Nombre Usuario"
                     onChangeText={setUserName}
@@ -85,3 +85,5 @@ export const Register = (navigation) => {
     );
 
 };
+
+export default Register;

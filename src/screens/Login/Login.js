@@ -1,9 +1,9 @@
 import React from "react";
-import { Button } from "../../components/Button/Button";
-import { InputText } from "../../components/InputText/InputText";
+import Button from "../../components/Button/Button";
+import InputText from "../../components/InputText/InputText";
 import { useState } from "react";
 
-export const Login = (navigation) => {
+const Login = ({navigation}) => {
     
     const [emailField, setEmailField] = useState("");
     const [passwordField, setPasswordField] = useState("");
@@ -14,3 +14,5 @@ export const Login = (navigation) => {
     }    
 
 }
+
+export default Login;
