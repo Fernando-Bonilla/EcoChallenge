@@ -20,7 +20,7 @@ export function UserProvider({children}) {
   );
 }
 
-// Hook personalizado para acceder fácilmente al contexto del usuario desde cualquier componente
+// Hook custom para acceder facilmente al contexto del usuario desde cualquier componente
 export function useUser() {
   return useContext(UserContext);
 }

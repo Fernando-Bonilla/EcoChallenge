@@ -1,23 +1,46 @@
 import React from "react";
-import { View, Alert, KeyboardAvoidingView } from "react-native";
+import { View, Alert, KeyboardAvoidingView, Image } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from "react";
-
 import Button from "../../components/Button/Button";
 import InputText from "../../components/InputText/InputText";
-
+import ImageComponent from "../../components/Image/Image";
+import { useUser } from "../../Context/UserContext";
 import styles from "./Register.styles";
 
 const Register = ({navigation}) => {
 
+    const {setUser} = useUser();
+
     const [userName , setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [profileImage, setProfileImage] = useState(null);
+
+    const pickImage = async () => {
+
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert("Permiso requerido", "Necesitamos permiso para acceder a tus fotos");
+            return;
+        }
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: [ImagePicker.MediaType.image],
+            allowsEditing: true,
+            aspect: [1, 1], // cuadrada
+            quality: 0.5,
+        });
+        if (!result.cancelled && result.assets) {
+            setProfileImage(result.assets[0].uri);
+        }
+    };
 
     const clearFields = () => {
         setUserName("");
         setEmail("");
         setPassword("");
+        setProfileImage(null);
     }
 
     const registerUser = async () => { // Aca agregar mas validaciones, por ahora es generico
@@ -33,9 +56,21 @@ const Register = ({navigation}) => {
             Alert.alert("Ingrese una contraseña valida");
             return;
         }
+        if (!profileImage) {
+            Alert.alert("Seleccione una imagen");
+            return;
+        }
+
+        if(await AsyncStorage.getItem(email)) { // Esto no me gusta porque ya da informacion, pero no me queda otra
+            console.log("Entra al chequeo email");
+            Alert.alert("Ya existe una cuenta con ese email")
+            clearFields();
+            return;
+        }
 
         try {
             const user = {email, userName, password}
+            setUser(user); // guardamos los datos del user en el context
             await AsyncStorage.setItem(email, JSON.stringify(user));
             clearFields();
             Alert.alert(" ",
@@ -75,7 +110,24 @@ const Register = ({navigation}) => {
                     maxLength={20}
                     value={password}
                     secureTextEntry={true}
-                />        
+                />
+
+                <Button customPress={pickImage}  //style={{ alignItems: "center", marginBottom: 20 }}
+                    title="Cargar Imagen">
+                    {profileImage ? (
+                        <ImageComponent
+                            source={{ uri: profileImage }}                            
+                        />
+                        ) : (
+                        <View style={{
+                            width: 100, height: 100, borderRadius: 50, backgroundColor: "#eee",
+                            alignItems: "center", justifyContent: "center", marginBottom: 10
+                            }}>
+                            <Text>Seleccionar foto</Text>
+                        </View>
+                    )}
+                </Button>
+
                 <Button
                     title="Crear Usuario"
                     customPress={registerUser}
