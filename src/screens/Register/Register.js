@@ -8,7 +8,7 @@ import { InputText } from "../../components/InputText/InputText";
 
 import styles from "./Register.styles";
 
-export const Register = (navigation) => {
+export const Register = ({ navigation }) => {
 
     const [userName , setUserName] = useState("");
     const [email, setEmail] = useState("");

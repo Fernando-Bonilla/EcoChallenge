@@ -6,12 +6,14 @@ import { LoginRegister } from "../screens/LoginRegister/LoginRegister";
 import { Login } from "../screens/Login/Login";
 import { Register } from "../screens/Register/Register";
 import { Home } from "../screens/Home/Home";
+import  AltaReto  from "../screens/AltaRetos/formAlta";
 
 const Stack = createNativeStackNavigator();
 
 export const RootStack = () => {
+     console.log(AltaReto)
+
     return(
-        <NavigationContainer>
             <Stack.Navigator initialRouteName="LoginRegister">
                 <Stack.Screen
                     name="LoginRegister"
@@ -22,6 +24,12 @@ export const RootStack = () => {
                     name="Login"
                     component={Login}
                     options={{title:"Login"}}
+                /> 
+                <Stack.Screen
+                
+                    name="formAlta"
+                    component={AltaReto}
+                    options={{title:"Alta de reto"}}
                 />  
                 <Stack.Screen
                     name="Register"
@@ -35,6 +43,5 @@ export const RootStack = () => {
                 />
 
             </Stack.Navigator>
-        </NavigationContainer>
     );
 };
