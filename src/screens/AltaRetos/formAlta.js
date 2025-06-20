@@ -4,73 +4,103 @@ import stylesForm from "./styleForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AltaReto = () => {
-    const [nombre, setNombre] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [categoria, setCategoria] = useState('');
-    const [fechaLimite, setFechaLimite] = useState('');
-    const [puntaje, setPuntaje] = useState('');
+    const [userName, setuserName] = useState('');
+    const [description, setdescription] = useState('');
+    const [category, setcategory] = useState('');
+    const [deadline, setdeadline] = useState('');
+    const [score, setscore] = useState('');
 
-    const handleSubmit = () => {
-    Alert.alert('Reto guardado', `Nombre: ${nombre}\nDescripción: ${descripcion}`);
-    };
 
     const handleChange = (text) => {
         const numericValue = text.replace(/[^0-9]/g, '');
 
         if (numericValue === '') {
-        setPuntaje('');
+        setscore('');
         } else {
         const number = parseInt(numericValue);
         if (number >= 1 && number <= 10) {
-            setPuntaje(numericValue);
+            setscore(numericValue);
         } else if (number > 10) {
-            setPuntaje('10'); // Limita a 10
+            setscore('10'); // Limita a 10
         }
         }
     };
 
+    const registerReto = async () => {
+        if (!userName) {
+            Alert.alert("Ingresa el nombre del reto");
+            return;
+        }
+        if (!description) {
+            Alert.alert("Agrega una descripción del reto");
+            return;
+        }
+        if (!category) {
+            Alert.alert("Agrega a que categoria corresponde el reto");
+            return;
+        }
+        if (!deadline) {
+            Alert.alert("Ingresa una fecha");
+            return;
+        }
+        if (!score) {
+            Alert.alert("Agrega un puntaje");
+            return;
+        }
+    };
+
+    const saveReto = async () => {
+        try {
+            const reto = { userName, description, category, deadline, score };
+            await AsyncStorage.setItem('Retos', JSON.stringify(reto));
+            Alert.alert('Reto guardado', `Nombre: ${userName}\nDescripción: ${description}`);
+        } catch {
+            console.error('no funciona bro:', error)
+        }
+    }
+
     return (
     <View style={{ padding: 20 }}>
-        <Text style={stylesForm.label}>Nombre del Reto</Text>
+        <Text style={stylesForm.label}>userName del Reto</Text>
         <TextInput
         style={stylesForm.input}
         placeholder="Ej: Reto de reciclaje"
-        value={nombre}
-        onChangeText={setNombre}
+        value={userName}
+        onChangeText={setuserName}
         />
 
         <Text style={stylesForm.label}>Descripción</Text>
         <TextInput
             style={stylesForm.input}
             placeholder="Ej: Recicla 3 botellas"
-            value={descripcion}
-            onChangeText={setDescripcion}
+            value={description}
+            onChangeText={setdescription}
         />
         <Text style={stylesForm.label}>Categoria</Text>
         <TextInput
             style={stylesForm.input}
             placeholder="Ej: Plástico, Papel, Electrónicos, etc."
-            value={categoria}
-            onChangeText={setCategoria}
+            value={category}
+            onChangeText={setcategory}
             /> 
         <Text style={stylesForm.label}>Fecha Limite</Text>
         <TextInput
             style={stylesForm.input}
             placeholder="Ej: 01/07/2025"
-            value={fechaLimite}
-            onChangeText={setFechaLimite}            
+            value={deadline}
+            onChangeText={setdeadline}            
         />
         <Text style={stylesForm.label}>Puntaje</Text>
         <TextInput
             style={stylesForm.input}
             placeholder="Escala de 1 al 10"
-            value={puntaje}
+            value={score}
             onChangeText={handleChange}
-            keyboardType="numeric"    // Muestra teclado numérico
+            keyboardType="numeric"   
             maxLength={2}    
             
         />
-        <Button title="Guardar" onPress={handleSubmit} />
+        <Button title="Guardar" onPress={saveReto} />
     </View>
   );
 };
