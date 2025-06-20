@@ -1,6 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
 
 import { UserProvider } from './src/Context/UserContext';
 import RootStack from './src/routes/RootStack';
@@ -17,6 +18,18 @@ export default function App() {
     </UserProvider>
   );
 }
+
+
+  /* return (
+    <NavigationContainer style={styles.container}>
+      <RootStack/>
+      <StatusBar style="auto" />
+    </NavigationContainer>
+  );
+
+ */
+
+
 
 const styles = StyleSheet.create({
   container: {
