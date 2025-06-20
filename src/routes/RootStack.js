@@ -26,7 +26,9 @@ const RootStack = () => {
                 <Stack.Screen
                     name="LoginRegister"
                     component={LoginRegister}
-                    options={{title:"Bienvenido"}}
+                    options={{title:"Bienvenido",
+                        headerLeft: () => null,
+                    }}
                 />                                    
                 <Stack.Screen
                     name="Login"
