@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Alert, KeyboardAvoidingView, Image } from "react-native";
+import { View, Alert, KeyboardAvoidingView, Image, Text } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from "react";
 import Button from "../../components/Button/Button";
+import { TouchableOpacity } from "react-native";
 import InputText from "../../components/InputText/InputText";
 import ImageComponent from "../../components/Image/Image";
 import { useUser } from "../../Context/UserContext";
@@ -21,17 +22,20 @@ const Register = ({navigation}) => {
     const pickImage = async () => {
 
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        
         if (status !== 'granted') {
             Alert.alert("Permiso requerido", "Necesitamos permiso para acceder a tus fotos");
             return;
         }
+
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: [ImagePicker.MediaType.image],
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1, 1], // cuadrada
+            aspect: [1, 1], 
             quality: 0.5,
         });
-        if (!result.cancelled && result.assets) {
+
+        if (!result.canceled && result.assets) {
             setProfileImage(result.assets[0].uri);
         }
     };
@@ -69,10 +73,10 @@ const Register = ({navigation}) => {
         }
 
         try {
-            const user = {email, userName, password}
+            const user = {email, userName, password, profileImage}
             setUser(user); // guardamos los datos del user en el context
             await AsyncStorage.setItem(email, JSON.stringify(user));
-            clearFields();
+            //clearFields();
             Alert.alert(" ",
                 "Usuario registrado con exito",
                 [{text: "OK", onPress: () => navigation.navigate("Home")}],
@@ -112,22 +116,23 @@ const Register = ({navigation}) => {
                     secureTextEntry={true}
                 />
 
-                <Button customPress={pickImage}  //style={{ alignItems: "center", marginBottom: 20 }}
-                    title="Cargar Imagen">
+                <TouchableOpacity onPress={pickImage} style={{ alignItems: "center", marginBottom: 20 }}>
                     {profileImage ? (
                         <ImageComponent
-                            source={{ uri: profileImage }}                            
+                        source={{ uri: profileImage }}
+                        style={{ width: 100, height: 100, borderRadius: 50 }}
                         />
-                        ) : (
+                    ) : (
                         <View style={{
-                            width: 100, height: 100, borderRadius: 50, backgroundColor: "#eee",
-                            alignItems: "center", justifyContent: "center", marginBottom: 10
-                            }}>
-                            <Text>Seleccionar foto</Text>
+                        width: 100, height: 100, borderRadius: 50, backgroundColor: "#eee",
+                        alignItems: "center", justifyContent: "center", marginBottom: 10
+                        }}>
+                        <Text>Seleccionar foto</Text>
                         </View>
                     )}
-                </Button>
+                </TouchableOpacity>
 
+                {console.log("en el register: ", profileImage)}
                 <Button
                     title="Crear Usuario"
                     customPress={registerUser}
