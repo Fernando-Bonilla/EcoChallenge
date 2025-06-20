@@ -3,6 +3,7 @@ import InputText from "../../components/InputText/InputText";
 import Button from "../../components/Button/Button";
 import { View } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
+import { Alert } from "react-native";
 
 import { useUser } from "../../Context/UserContext";
 
@@ -40,21 +41,21 @@ const Settings = ({navigation}) => {
         setNewName("");
         setNewEmail("");
         setNewPassword("");
-        setNewProfileImage(null);
+        //setNewProfileImage(null);
     }
 
     const updateUserSettings = async () => {
         
-        if(!userName) {
+        if(!newName) {
             Alert.alert("Ingrese un nombre de usuario");
             return;
         }
-        if(!email) {
+        if(!newEmail) {
             Alert.alert("Ingrese un email");
             return;
         }        
 
-        if(!password) {
+        if(!newPassword) {
             Alert.alert("Ingrese una contraseña valida");
             return;
         }
@@ -63,20 +64,20 @@ const Settings = ({navigation}) => {
             return;
         } */
 
-        if(await AsyncStorage.getItem(email)) { 
+        /* if(await AsyncStorage.getItem(email)) { 
             console.log("Entra al chequeo email");
             Alert.alert("Ya existe una cuenta con ese email")
             //clearFields();
             return;
-        } 
+        }  */
 
-        if (originalEmail !== email) {
+        if (originalEmail !== newEmail) {
         // Borramos el usuario viejo buscando con el email original
         await AsyncStorage.removeItem(originalEmail);
         }
 
         try {
-            await AsyncStorage.removeItem(email);
+            //await AsyncStorage.removeItem(email);
 
             const userUpdated = {
                 userName: newName,
@@ -87,8 +88,8 @@ const Settings = ({navigation}) => {
 
             setUser(userUpdated); // guardamos los datos nuevos del user en el context
 
-            await AsyncStorage.setItem(email, JSON.stringify(userUpdated));
-            setOriginalEmail(email);
+            await AsyncStorage.setItem(newEmail, JSON.stringify(userUpdated));
+            setOriginalEmail(newEmail);
 
             clearFields();
 
@@ -111,20 +112,20 @@ const Settings = ({navigation}) => {
             <KeyboardAvoidingView>
                 <InputText
                     onChangeText={setNewName}
-                    value={userName}
+                    value={newName}
                 />
                 <InputText
                     onChangeText={setNewEmail}
                     minLength={3}
                     maxLength={20}
-                    value={email}                                       
+                    value={newEmail}                                       
                 />
 
                 <InputText
                     onChangeText={setNewPassword}
                     minLength={3}
                     maxLength={20}
-                    value=""
+                    value={newPassword}
                     secureTextEntry={true}                    
                 />
                 <Button
