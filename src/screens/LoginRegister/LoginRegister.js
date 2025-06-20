@@ -18,11 +18,7 @@ const LoginRegister = ({navigation}) => {
                 title="Registrarse"
                 customPress={() => navigation.navigate("Register")}>                
             </Button>
-
-            <Button
-                title="Alta Retos"
-                customPress={() => navigation.navigate("formAlta")}>                
-            </Button>
+            
         </View>
        
     );    

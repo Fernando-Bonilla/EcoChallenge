@@ -15,7 +15,17 @@ const  Home = ({navigation}) => {
     }
 
     return (
-        <View style={styles.container}>           
+        <View style={styles.container}>       
+
+            <Button
+                title="Alta Retos"
+                customPress={() => navigation.navigate("formAlta")}>                
+            </Button>    
+
+             <Button
+                title="Configuraciones"
+                customPress={() => navigation.navigate("Settings")}>                
+            </Button>
 
             <Button
                 title="Logout"

@@ -56,10 +56,10 @@ const Register = ({navigation}) => {
             Alert.alert("Ingrese una contraseña valida");
             return;
         }
-        if (!profileImage) {
+        /* if (!profileImage) {
             Alert.alert("Seleccione una imagen");
             return;
-        }
+        } */
 
         if(await AsyncStorage.getItem(email)) { // Esto no me gusta porque ya da informacion, pero no me queda otra
             console.log("Entra al chequeo email");
