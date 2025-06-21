@@ -20,6 +20,11 @@ const  Home = ({navigation}) => {
             <Button
                 title="Alta Retos"
                 customPress={() => navigation.navigate("formAlta")}>                
+            </Button> 
+            
+            <Button
+                title="Lista de Retos"
+                customPress={() => navigation.navigate("listRetos")}>                
             </Button>    
 
              <Button

@@ -11,6 +11,8 @@ import  AltaReto  from "../screens/AltaRetos/formAlta";
 import Settings from "../screens/Settings/Settings";
 
 import { useUser } from "../Context/UserContext";
+import { ListRetos } from "../screens/AltaRetos/listRetos";
+import UpdateRetoForm from "../screens/AltaRetos/updateRetos";
 
 //const Stack = createNativeStackNavigator();
 const Stack = createStackNavigator();
@@ -46,6 +48,16 @@ const RootStack = () => {
                     component={Register}
                     options={{title:"Registrarse"}}
                 />              
+                <Stack.Screen
+                    name="listRetos"
+                    component={ListRetos}
+                    options={{title:"Lista de Retos"}}
+                />
+                <Stack.Screen
+                name="updateRetos"
+                component={UpdateRetoForm}
+                options={{ title: "Actualizar Reto" }}
+                />
                 <Stack.Screen
                     name="Settings"
                     component={Settings}

@@ -26,42 +26,58 @@ const AltaReto = () => {
         }
     };
 
-    const registerReto = async () => {
-        if (!userName) {
-            Alert.alert("Ingresa el nombre del reto");
-            return;
-        }
-        if (!description) {
-            Alert.alert("Agrega una descripción del reto");
-            return;
-        }
-        if (!category) {
-            Alert.alert("Agrega a que categoria corresponde el reto");
-            return;
-        }
-        if (!deadline) {
-            Alert.alert("Ingresa una fecha");
-            return;
-        }
-        if (!score) {
-            Alert.alert("Agrega un puntaje");
-            return;
-        }
+    const HandleSubmit = () => {
+
+    if (!userName) {
+        Alert.alert("Ingresa el nombre del reto");
+        return;
+    }
+    if (!description) {
+        Alert.alert("Agrega una descripción del reto");
+        return;
+    }
+    if (!category) {
+        Alert.alert("Agrega a que categoria corresponde el reto");
+        return;
+    }
+    if (!deadline) {
+        Alert.alert("Ingresa una fecha");
+        return;
+    }
+    if (!score) {
+        Alert.alert("Agrega un puntaje");
+        return;
+    }
+    const nuevoReto = {
+        userName,
+        description,
+        category,
+        deadline,
+        score,
     };
 
-    const saveReto = async () => {
+    saveReto(nuevoReto);
+    };
+
+   
+    const saveReto = async (nuevoReto) => {
+
         try {
-            const reto = { userName, description, category, deadline, score };
-            await AsyncStorage.setItem('Retos', JSON.stringify(reto));
-            Alert.alert('Reto guardado', `Nombre: ${userName}\nDescripción: ${description}`);
+            const jsonValue = await AsyncStorage.getItem('arrayRetos');
+            let arrayRetos = jsonValue != null ? JSON.parse(jsonValue) : [];
+            console.log(arrayRetos)
+            arrayRetos.push(nuevoReto);
+            await AsyncStorage.setItem('arrayRetos', JSON.stringify(arrayRetos));
+            console.log('Agregado Correctamente');
         } catch {
-            console.error('no funciona bro:', error)
+            console.error('NO FUNCIONA BRO:', error)
         }
     }
 
     return (
+        
     <View style={{ padding: 20 }}>
-        <Text style={stylesForm.label}>userName del Reto</Text>
+        <Text style={stylesForm.label}>Nombre del Reto</Text>
         <TextInput
         style={stylesForm.input}
         placeholder="Ej: Reto de reciclaje"
@@ -100,7 +116,7 @@ const AltaReto = () => {
             maxLength={2}    
             
         />
-        <Button title="Guardar" onPress={saveReto} />
+        <Button title="Guardar" onPress={HandleSubmit} />
     </View>
   );
 };
