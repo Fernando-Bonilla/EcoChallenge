@@ -151,7 +151,7 @@ const Settings = ({navigation}) => {
                         width: 100, height: 100, borderRadius: 50, backgroundColor: "#eee",
                         alignItems: "center", justifyContent: "center", marginBottom: 10
                         }}>
-                        <Text>Seleccionar foto</Text>
+                        <Text>foto</Text>
                         </View>
                     )}
                 </TouchableOpacity>

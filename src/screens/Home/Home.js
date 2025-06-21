@@ -23,6 +23,11 @@ const  Home = ({navigation}) => {
             </Button>    
 
              <Button
+                title="Crear Material"
+                customPress={() => navigation.navigate("AltaMateriales")}>                
+            </Button>
+
+             <Button
                 title="Configuraciones"
                 customPress={() => navigation.navigate("Settings")}>                
             </Button>
