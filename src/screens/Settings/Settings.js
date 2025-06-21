@@ -3,7 +3,11 @@ import InputText from "../../components/InputText/InputText";
 import Button from "../../components/Button/Button";
 import { View } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Text } from "react-native";
 import { Alert } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
+import ImageComponent from "../../components/Image/Image";
 
 import { useUser } from "../../Context/UserContext";
 
@@ -12,36 +16,43 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Settings = ({navigation}) => {
     const {user, setUser} = useUser(); // Traemos los datos del current user del contexto
-
-    /* if (!user || !user.userName) {
-        return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <Text>Cargando usuario...</Text>
-            </View>
-        );
-    } */
+   
     console.log('Usuario en contexto:', user);
 
     const [originalEmail, setOriginalEmail] = useState(user.email);
-
-/*     const [userName, setUserName] = useState(user.userName);
-    const [password, setPassword] = useState(user.password);
-    const [email, setEmail] = useState(user.email);    
-    const [profileImage, setProfileImage] = useState(user.profileImage);
- */
 
     // Variables locales para los inputs
     const [newName, setNewName] = useState(user.userName);
     const [newEmail, setNewEmail] = useState(user.email);
     const [newPassword, setNewPassword] = useState(user.password);
-    //const [newprofileImage, setNewProfileImage] = useState(user.profileImage);
+    const [newprofileImage, setNewProfileImage] = useState(user.profileImage);
 
+    const pickImage = async () => {
+    
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        
+        if (status !== 'granted') {
+            Alert.alert("Permiso requerido", "Necesitamos permiso para acceder a tus fotos");
+            return;
+        }
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1], 
+            quality: 0.5,
+        });
+
+        if (!result.canceled && result.assets) {
+            setNewProfileImage(result.assets[0].uri);
+        }
+    };
 
     const clearFields = () => {
         setNewName("");
         setNewEmail("");
         setNewPassword("");
-        //setNewProfileImage(null);
+        setNewProfileImage(null);
     }
 
     const updateUserSettings = async () => {
@@ -83,7 +94,7 @@ const Settings = ({navigation}) => {
                 userName: newName,
                 email: newEmail,
                 password: newPassword,
-                //profileImage: newrofileImage
+                profileImage: newprofileImage
             };
 
             setUser(userUpdated); // guardamos los datos nuevos del user en el context
@@ -128,6 +139,23 @@ const Settings = ({navigation}) => {
                     value={newPassword}
                     secureTextEntry={true}                    
                 />
+                
+                <TouchableOpacity onPress={pickImage} style={{ alignItems: "center", marginBottom: 20 }}>
+                    {newprofileImage ? (
+                        <ImageComponent
+                        source={{ uri: newprofileImage}} // 
+                        style={{ width: 100, height: 100, borderRadius: 50 }}
+                        />
+                    ) : (
+                        <View style={{
+                        width: 100, height: 100, borderRadius: 50, backgroundColor: "#eee",
+                        alignItems: "center", justifyContent: "center", marginBottom: 10
+                        }}>
+                        <Text>foto</Text>
+                        </View>
+                    )}
+                </TouchableOpacity>
+
                 <Button
                     title="Guardar"
                     customPress={updateUserSettings}

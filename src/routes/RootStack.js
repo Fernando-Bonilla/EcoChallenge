@@ -7,8 +7,9 @@ import LoginRegister from "../screens/LoginRegister/LoginRegister";
 import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
 import Home from "../screens/Home/Home";
-import  AltaReto  from "../screens/AltaRetos/formAlta";
+import AltaReto  from "../screens/AltaRetos/formAlta";
 import Settings from "../screens/Settings/Settings";
+import AltaMateriales from "../screens/Materiales/AltaMateriales";
 
 import { useUser } from "../Context/UserContext";
 import { ListRetos } from "../screens/AltaRetos/listRetos";
@@ -71,6 +72,13 @@ const RootStack = () => {
                         headerLeft: () => null,
                     }}
                     
+                />
+                <Stack.Screen
+                    name="AltaMateriales"
+                    component={AltaMateriales}
+                    options={{
+                        title: "Crear Material"
+                    }}
                 />
 
             </Stack.Navigator>
