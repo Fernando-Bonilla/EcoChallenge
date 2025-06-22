@@ -6,10 +6,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import LoginRegister from "../screens/LoginRegister/LoginRegister";
 import Login from "../screens/Login/Login";
 import Register from "../screens/Register/Register";
+
 import Home from "../screens/Home/Home";
 import AltaReto  from "../screens/AltaRetos/formAlta";
+
 import Settings from "../screens/Settings/Settings";
+
 import AltaMateriales from "../screens/Materiales/AltaMateriales";
+import ListMateriales from "../screens/Materiales/ListadoMateriales";
+import UpdateMateriales from "../screens/Materiales/UpdateMateriales";
 
 import { useUser } from "../Context/UserContext";
 import { ListRetos } from "../screens/AltaRetos/listRetos";
@@ -78,6 +83,21 @@ const RootStack = () => {
                     component={AltaMateriales}
                     options={{
                         title: "Crear Material"
+                    }}
+                />
+
+                <Stack.Screen
+                    name="ListMateriales"
+                    component={ListMateriales}
+                    options={{
+                        title: "Lista de Materiales"
+                    }}
+                />
+                <Stack.Screen
+                    name="UpdateMateriales"
+                    component={UpdateMateriales}
+                    options={{
+                        title: "Editar Material"
                     }}
                 />
 

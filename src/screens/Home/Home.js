@@ -27,9 +27,14 @@ const  Home = ({navigation}) => {
                 customPress={() => navigation.navigate("listRetos")}>                
             </Button>    
 
-             <Button
+            <Button
                 title="Crear Material"
                 customPress={() => navigation.navigate("AltaMateriales")}>                
+            </Button>
+
+            <Button
+                title="Lista Material"
+                customPress={() => navigation.navigate("ListMateriales")}>                
             </Button>
 
              <Button

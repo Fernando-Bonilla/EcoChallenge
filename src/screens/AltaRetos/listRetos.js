@@ -13,33 +13,33 @@ export  function ListRetos() {
     const [reto, setReto] = useState([]);
     const navigation = useNavigation();
 
-const confirmDelete = (indexToDelete) => {
-  Alert.alert(
-    "Confirmar eliminación",
-    "¿Deseás eliminar este reto, brother?",
-    [
-      {
-        text: "Cancelar",
-        style: "cancel"
-      },
-      {
-        text: "OK",
-        onPress: () => handleDelete(indexToDelete)
-      }
-    ],
-    { cancelable: false }
-  );
-};
+    const confirmDelete = (indexToDelete) => {
+      Alert.alert(
+        "Confirmar eliminación",
+        "¿Deseás eliminar este reto, brother?",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel"
+          },
+          {
+            text: "OK",
+            onPress: () => handleDelete(indexToDelete)
+          }
+        ],
+        { cancelable: false }
+      );
+    };
 
     const handleDelete = async (indexToDelete) => {
-    try {
+      try {
         const nuevosRetos = reto.filter((_, index) => index !== indexToDelete);
         setReto(nuevosRetos);
         await AsyncStorage.setItem('arrayRetos', JSON.stringify(nuevosRetos));
         Alert.alert('Reto eliminado con éxito');
-    } catch (error) {
+      }catch (error) {
         console.error('Error al eliminar el reto:', error);
-    }
+      }
     };
 
 
