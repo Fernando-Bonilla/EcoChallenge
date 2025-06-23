@@ -62,38 +62,35 @@ const Participation = () => {
     }
 
     try {
-        // 🛰️ Pedir permisos de ubicación
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-        alert('Permiso de ubicación denegado');
-        return;
+          alert('Permiso de ubicación denegado');
+          return;
         }
 
-        // 📍 Obtener ubicación actual
         const location = await Location.getCurrentPositionAsync({});
         const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
         };
 
-        // Crear participación con ubicación incluida
-        const nuevaParticipacion = {
-        reto: selected,
-        comentario: comment,
-        imagen: image,
-        usuario: user?.userName || "Desconocido",
-        ubicacion: coords,
-        fecha: new Date().toISOString(),
+        const newParticipation = {
+          reto: selected,
+          comment: comment,
+          img: image,
+          user: user?.userName || "Desconocido",
+          location: coords,
+          date: new Date().toISOString(),
         };
 
         const existentes = await AsyncStorage.getItem("participaciones");
         const participaciones = existentes ? JSON.parse(existentes) : [];
 
-        participaciones.push(nuevaParticipacion);
+        participaciones.push(newParticipation);
         await AsyncStorage.setItem("participaciones", JSON.stringify(participaciones));
 
         alert("¡Participación enviada!");
-        console.log(nuevaParticipacion);
+        console.log(newParticipation);
         setSelected("");
         setComment("");
         setImage("");
@@ -105,7 +102,7 @@ const Participation = () => {
 
 
     return (
-  <View style={stylesParticipate.container}>
+    <View style={stylesParticipate.container}>
     <Text style={stylesParticipate.title}>Participación de Retos</Text>
     
     <Picker

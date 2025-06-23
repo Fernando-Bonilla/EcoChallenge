@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
+import { View, Text, TextInput, Alert } from "react-native";
 import stylesForm from "./styleForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Button from "../../components/Button/Button";
 
 const AltaReto = () => {
     const [userName, setuserName] = useState('');
@@ -116,7 +117,10 @@ const AltaReto = () => {
             maxLength={2}    
             
         />
-        <Button title="Guardar" onPress={HandleSubmit} />
+        <Button
+            title="Guardar" onPress={HandleSubmit}
+        >
+        </Button>
     </View>
   );
 };

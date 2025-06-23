@@ -4,9 +4,8 @@ import { useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
-
 import { useState } from "react";
-import styles from "./ListadoMateriales.styles";
+import { styleListMateriales } from "./ListadoMateriales.styles";
 
 const ListMateriales = ({navigation}) => {
     const [articulos, setArticulos] = useState([]);
@@ -92,34 +91,43 @@ const ListMateriales = ({navigation}) => {
     );
 
     return (
-        <View style={styles.view}>
-            {articulos.length > 0 ? (
-                articulos.map((articulo, index) => (
-                    <View key={index}>
+       <View style={styleListMateriales.view}>
+        {articulos.length > 0 ? (
+            articulos.map((articulo, index) => (
+            <View key={index} style={styleListMateriales.cardContainer}>
+                <Text style={styleListMateriales.cardText}>Articulo: {articulo.name}</Text>
+                <Text style={styleListMateriales.cardText}>Categoria: {articulo.category}</Text>
 
-                        <Text>Articulo: {articulo.name}</Text>
-                        <Text>Categoria: {articulo.category}</Text>
+                <View style={styleListMateriales.buttonGroup}>
+                <Button
+                    title="Eliminar"
+                    customPress={() => confirmDelete(index)}
+                />
+                <Button
+                    title="Editar"
+                    customPress={() =>
+                    navigation.navigate("UpdateMateriales", {
+                        index: index,
+                        articuloActual: articulo,
+                    })
+                    }
+                /><Button
+                    title="Agregar"
+                    customPress={() =>
+                    navigation.navigate("AltaMateriales")
+                    }
+                />
+                
+                </View>
+            </View>
+            ))
+        ) : (
+            <Text style={styleListMateriales.emptyText}>
+            No hay artículos para mostrar.
+            </Text>
+        )}
+</View>
 
-                        <Button
-                            title="Eliminar"
-                            customPress={() => confirmDelete(index)}
-                        />
-                        <Button
-                            title="Editar"
-                            customPress={() =>
-                                navigation.navigate("UpdateMateriales", {
-                                    index: index,
-                                    articuloActual: articulo,
-                                })
-                            }
-                        />
-                    </View>
-                ))
-            ) : (
-                <Text>No hay articulos para mostrar.</Text>
-            )}
-
-        </View>
     );
 
 

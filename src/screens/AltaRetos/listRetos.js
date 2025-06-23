@@ -2,12 +2,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, Alert } from "react-native";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
 import { useFocusEffect } from '@react-navigation/native';
-
-
+import { styleListRetos } from "./styleListRetos";
 
 export  function ListRetos() {
     const [reto, setReto] = useState([]);
@@ -66,36 +65,48 @@ export  function ListRetos() {
 );
 
 
-    return (
-        <View>
-        {reto.length > 0 ? (
-        reto.map((reto, index) => (
-            <View key={index}>
-            <Card
-                userName={reto.userName}
-                description={reto.description}
-                category={reto.category}
-                deadline={reto.deadline}
-                score={reto.score}
+
+return (
+  <View style={styleListRetos.container}>
+    {reto.length > 0 ? (
+      reto.map((reto, index) => (
+        <View key={index} style={styleListRetos.cardWrapper}>
+          <Card
+            userName={reto.userName}
+            description={reto.description}
+            category={reto.category}
+            deadline={reto.deadline}
+            score={reto.score}
+          />
+          <View style={styleListRetos.buttonGroup}>
+            <Button
+              title="Eliminar"
+              customPress={() => confirmDelete(index)}
             />
             <Button
-                title="Eliminar"
-                customPress={() => confirmDelete(index)}
-            />
-             <Button
               title="Actualizar"
               customPress={() =>
                 navigation.navigate("updateRetos", {
                   index: index,
                   retoActual: reto,
                 })
-              }/>
-            </View>
-        ))
-        ) : (
-        <Text>No hay retos para mostrar. {JSON.stringify(reto)}</Text>
-        )}
-
+              }
+            />
+             <Button
+              title="Agregar"
+              customPress={() =>
+                navigation.navigate("formAlta")
+              }
+            />
+          </View>
         </View>
-    );
+      ))
+    ) : (
+      <Text style={styleListRetos.emptyText}>
+        No hay retos para mostrar.
+      </Text>
+    )}
+  </View>
+);
+
 }
