@@ -1,4 +1,5 @@
 import { View, Text, Alert } from "react-native";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,7 +8,7 @@ import Button from "../../components/Button/Button";
 import { useState } from "react";
 import { styleListMateriales } from "./ListadoMateriales.styles";
 
-const ListMateriales = ({navigation}) => {
+const ListMateriales = ({ navigation }) => {
     const [articulos, setArticulos] = useState([]);
 
     const confirmDelete = (indexToDelete) => {
@@ -91,42 +92,48 @@ const ListMateriales = ({navigation}) => {
     );
 
     return (
-       <View style={styleListMateriales.view}>
-        {articulos.length > 0 ? (
-            articulos.map((articulo, index) => (
-            <View key={index} style={styleListMateriales.cardContainer}>
-                <Text style={styleListMateriales.cardText}>Articulo: {articulo.name}</Text>
-                <Text style={styleListMateriales.cardText}>Categoria: {articulo.category}</Text>
+        <KeyboardAvoidingView behavior="padding" style={{flex: 1, padding: 20}}> 
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
+        {/* <View style={styleListMateriales.view}> */}
+            {articulos.length > 0 ? (
+                articulos.map((articulo, index) => (
+                    <View key={index} style={styleListMateriales.cardContainer}>
+                        <Text style={styleListMateriales.cardText}>Articulo: {articulo.name}</Text>
+                        <Text style={styleListMateriales.cardText}>Categoria: {articulo.category}</Text>
 
-                <View style={styleListMateriales.buttonGroup}>
-                <Button
-                    title="Eliminar"
-                    customPress={() => confirmDelete(index)}
-                />
-                <Button
-                    title="Editar"
-                    customPress={() =>
-                    navigation.navigate("UpdateMateriales", {
-                        index: index,
-                        articuloActual: articulo,
-                    })
-                    }
-                /><Button
-                    title="Agregar"
-                    customPress={() =>
+                        <View style={styleListMateriales.buttonGroup}>
+                            <Button
+                                title="Eliminar"
+                                customPress={() => confirmDelete(index)}
+                            />
+                            <Button
+                                title="Editar"
+                                customPress={() =>
+                                    navigation.navigate("UpdateMateriales", {
+                                        index: index,
+                                        articuloActual: articulo,
+                                    })
+                                }
+                            />
+
+                        </View>
+
+                    </View>
+                ))
+            ) : (
+                <Text style={styleListMateriales.emptyText}>
+                    No hay artículos para mostrar.
+                </Text>
+            )}
+            <Button
+                title="Agregar"
+                customPress={() =>
                     navigation.navigate("AltaMateriales")
-                    }
-                />
-                
-                </View>
-            </View>
-            ))
-        ) : (
-            <Text style={styleListMateriales.emptyText}>
-            No hay artículos para mostrar.
-            </Text>
-        )}
-</View>
+                }
+            />
+        {/* </View> */}
+        </ScrollView>
+        </KeyboardAvoidingView>
 
     );
 
