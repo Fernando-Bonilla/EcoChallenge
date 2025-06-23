@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#3B82F6", // azul moderno
+    backgroundColor: "#3B82F6", 
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
 
-    // Sombra moderna (iOS + Android)
+    // Sombra 
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

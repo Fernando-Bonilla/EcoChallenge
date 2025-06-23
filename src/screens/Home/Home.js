@@ -29,13 +29,13 @@ const Home = ({ navigation }) => {
       {/* Contenedor de botones inferiores */}
       <View style={styles.bottomButtons}>
         <Button
-          title="Configuraciones"
-          customPress={() => navigation.navigate("Settings")}
-        />
-        <Button
-          title="Participación"
+          title="Participación a Retos"
           customPress={() => navigation.navigate("Participate")}
         />
+        <Button
+          title="Configuraciones"
+          customPress={() => navigation.navigate("Settings")}
+        />        
         <Button
           title="Logout"
           btnColor="#c62100"

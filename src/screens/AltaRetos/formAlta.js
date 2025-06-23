@@ -3,6 +3,7 @@ import { View, Text, TextInput, Alert } from "react-native";
 import stylesForm from "./styleForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../../components/Button/Button";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 
 const AltaReto = () => {
     const [userName, setuserName] = useState('');
@@ -75,54 +76,56 @@ const AltaReto = () => {
         }
     }
 
-    return (
-        
-    <View style={{ padding: 20 }}>
-        <Text style={stylesForm.label}>Nombre del Reto</Text>
-        <TextInput
-        style={stylesForm.input}
-        placeholder="Ej: Reto de reciclaje"
-        value={userName}
-        onChangeText={setuserName}
-        />
+    return (          
+        <KeyboardAvoidingView behavior="padding" style={{flex: 1, padding: 20}}> 
+            <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
+                <Text style={stylesForm.label}>Nombre del Reto</Text>
+                <TextInput
+                style={stylesForm.input}
+                placeholder="Ej: Reto de reciclaje"
+                value={userName}
+                onChangeText={setuserName}
+                />
 
-        <Text style={stylesForm.label}>Descripción</Text>
-        <TextInput
-            style={stylesForm.input}
-            placeholder="Ej: Recicla 3 botellas"
-            value={description}
-            onChangeText={setdescription}
-        />
-        <Text style={stylesForm.label}>Categoria</Text>
-        <TextInput
-            style={stylesForm.input}
-            placeholder="Ej: Plástico, Papel, Electrónicos, etc."
-            value={category}
-            onChangeText={setcategory}
-            /> 
-        <Text style={stylesForm.label}>Fecha Limite</Text>
-        <TextInput
-            style={stylesForm.input}
-            placeholder="Ej: 01/07/2025"
-            value={deadline}
-            onChangeText={setdeadline}            
-        />
-        <Text style={stylesForm.label}>Puntaje</Text>
-        <TextInput
-            style={stylesForm.input}
-            placeholder="Escala de 1 al 10"
-            value={score}
-            onChangeText={handleChange}
-            keyboardType="numeric"   
-            maxLength={2}    
-            
-        />
-        <Button
-            title="Guardar" onPress={HandleSubmit}
-        >
-        </Button>
-    </View>
-  );
+                <Text style={stylesForm.label}>Descripción</Text>
+                <TextInput
+                    style={stylesForm.input}
+                    placeholder="Ej: Recicla 3 botellas"
+                    value={description}
+                    onChangeText={setdescription}
+                />
+                <Text style={stylesForm.label}>Categoria</Text>
+                <TextInput
+                    style={stylesForm.input}
+                    placeholder="Ej: Plástico, Papel, Electrónicos, etc."
+                    value={category}
+                    onChangeText={setcategory}
+                    /> 
+                <Text style={stylesForm.label}>Fecha Limite</Text>
+                <TextInput
+                    style={stylesForm.input}
+                    placeholder="Ej: 01/07/2025"
+                    value={deadline}
+                    onChangeText={setdeadline}            
+                />
+                <Text style={stylesForm.label}>Puntaje</Text>
+                <TextInput
+                    style={stylesForm.input}
+                    placeholder="Escala de 1 al 10"
+                    value={score}
+                    onChangeText={handleChange}
+                    keyboardType="numeric"   
+                    maxLength={2}    
+                    
+                />
+                <Button
+                    title="Guardar" onPress={HandleSubmit}
+                >
+                </Button>
+            </ScrollView>
+        </KeyboardAvoidingView>
+   
+    );
 };
 
 export default AltaReto; 
