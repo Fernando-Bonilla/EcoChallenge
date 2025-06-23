@@ -12,6 +12,13 @@ const AltaReto = () => {
     const [deadline, setdeadline] = useState('');
     const [score, setscore] = useState('');
 
+    const clearFields = () => {       
+        setuserName("");
+        setdescription("");
+        setcategory("");
+        setdeadline("");
+        setscore("");
+    }
 
     const handleChange = (text) => {
         const numericValue = text.replace(/[^0-9]/g, '');
@@ -62,15 +69,23 @@ const AltaReto = () => {
     };
 
    
-    const saveReto = async (nuevoReto) => {
+    const saveReto = async (reto) => {
 
         try {
             const jsonValue = await AsyncStorage.getItem('arrayRetos');
             let arrayRetos = jsonValue != null ? JSON.parse(jsonValue) : [];
             console.log(arrayRetos)
-            arrayRetos.push(nuevoReto);
+            arrayRetos.push(reto);
             await AsyncStorage.setItem('arrayRetos', JSON.stringify(arrayRetos));
             console.log('Agregado Correctamente');
+
+            Alert.alert(" ",
+                "Reto creado con exito",
+                [{ text: "OK", onPress: () => { } }],
+                { cancelable: false }
+            )
+            clearFields();
+
         } catch {
             console.error('NO FUNCIONA BRO:', error)
         }
@@ -119,7 +134,7 @@ const AltaReto = () => {
                     
                 />
                 <Button
-                    title="Guardar" onPress={HandleSubmit}
+                    title="Guardar" customPress={HandleSubmit}
                 >
                 </Button>
             </ScrollView>

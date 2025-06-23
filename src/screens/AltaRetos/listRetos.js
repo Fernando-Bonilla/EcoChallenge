@@ -64,8 +64,6 @@ export function ListRetos() {
     }, [])
   );
 
-
-
   return (
     <View style={styleListRetos.container}>
       {reto.length > 0 ? (

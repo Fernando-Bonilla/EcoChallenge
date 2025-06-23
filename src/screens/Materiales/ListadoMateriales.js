@@ -137,8 +137,6 @@ const ListMateriales = ({ navigation }) => {
 
     );
 
-
-
 }
 
 export default ListMateriales;
