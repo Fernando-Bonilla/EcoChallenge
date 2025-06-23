@@ -41,7 +41,11 @@ const  Home = ({navigation}) => {
                 title="Configuraciones"
                 customPress={() => navigation.navigate("Settings")}>                
             </Button>
-
+            <Button
+                title="Participación"
+                customPress={ ()=> navigation.navigate('Participate')}
+            >
+            </Button>
             <Button
                 title="Logout"
                 btnColor="#c62100"

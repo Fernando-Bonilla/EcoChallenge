@@ -19,6 +19,7 @@ import UpdateMateriales from "../screens/Materiales/UpdateMateriales";
 import { useUser } from "../Context/UserContext";
 import { ListRetos } from "../screens/AltaRetos/listRetos";
 import UpdateRetoForm from "../screens/AltaRetos/updateRetos";
+import participation from "../screens/Participate/Participate";
 
 //const Stack = createNativeStackNavigator();
 const Stack = createStackNavigator();
@@ -75,7 +76,7 @@ const RootStack = () => {
                     options={{
                         title: user ? `Hola ${user.userName}` : "Bienvenido",
                         headerLeft: () => null,
-                    }}
+                }}
                     
                 />
                 <Stack.Screen
@@ -91,6 +92,13 @@ const RootStack = () => {
                     component={ListMateriales}
                     options={{
                         title: "Lista de Materiales"
+                    }}
+                />
+                <Stack.Screen
+                    name="Participate"
+                    component={participation}
+                    options={{
+                        title: "Participación"
                     }}
                 />
                 <Stack.Screen
