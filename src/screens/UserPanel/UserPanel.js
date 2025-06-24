@@ -11,6 +11,7 @@ const UserPanel = ({ navigation }) => {
     const { user } = useUser();
     const [challengePerUser, setChallengePerUser] = useState([]);
     const [finalScore, setFinalScore] = useState(0);
+    const [userLvl, setUserLvl] = useState("");
 
     //Buscamos las participaciones del usuario
     useFocusEffect(
@@ -19,10 +20,10 @@ const UserPanel = ({ navigation }) => {
             const GetParticipations = async () => {
                 const data = await AsyncStorage.getItem("participaciones");
                 const participaciones = JSON.parse(data);
-                //console.log(participaciones);
+                
                 const retosDeUsuario = participaciones ? participaciones.filter((p) => p.user === user.email) : [];
                 setChallengePerUser(retosDeUsuario);
-                //console.log(retosDeUsuario);            
+                          
             };
 
             GetParticipations();
@@ -35,24 +36,46 @@ const UserPanel = ({ navigation }) => {
     useEffect (() => {
         function getScore() {
             let acum = 0;
-
-            console.log("challenges: ", challengePerUser);
+            
             for (let reto of challengePerUser) {
-                acum = acum + parseInt(reto.score)
+                acum += parseInt(reto.score)
             }
 
             setFinalScore(acum);
             console.log("acum: ", acum);
         };
-        getScore();
+        
+        getScore();        
 
     }, [challengePerUser]);
 
+    useEffect(() => {
+
+        function getLvl() {
+            if(finalScore >= 0 ||  finalScore <= 5) {
+                setUserLvl("Principiante");
+                
+
+            }else if(finalScore > 5 && finalScore <= 15) {
+                setUserLvl("Avanzado");
+                
+
+            }else {
+                setUserLvl("Sarpado en Reciclaje");
+            }
+        }
+
+        getLvl();
+
+    },[finalScore]);
+
 
     return (
+        
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
+            
             <Text>
-                Nivel Alcanzado: { }
+                Nivel Alcanzado: {userLvl}
             </Text>
             <Text>
                 Retos Completados: {challengePerUser ? (challengePerUser.length) : 0}
