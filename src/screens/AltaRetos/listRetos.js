@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, KeyboardAvoidingView, ScrollView } from "react-native";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import { useState } from "react";
@@ -65,7 +65,9 @@ export function ListRetos() {
   );
 
   return (
-    <View style={styleListRetos.container}>
+    //<View style={styleListRetos.container}>
+      <KeyboardAvoidingView behavior="padding" style={{flex: 1, padding: 20}}> 
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
       {reto.length > 0 ? (
         reto.map((reto, index) => (
           <View key={index} style={styleListRetos.cardWrapper}>
@@ -105,7 +107,9 @@ export function ListRetos() {
           navigation.navigate("formAlta")
         }
       />
-    </View>
+    </ScrollView>
+    </KeyboardAvoidingView>
+    //</View>
   );
 
 }
