@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
+import styles from "./UserPanel.styles";
+
 const UserPanel = ({ navigation }) => {
 
     const { user } = useUser();
@@ -20,10 +22,10 @@ const UserPanel = ({ navigation }) => {
             const GetParticipations = async () => {
                 const data = await AsyncStorage.getItem("participaciones");
                 const participaciones = JSON.parse(data);
-                
+
                 const retosDeUsuario = participaciones ? participaciones.filter((p) => p.user === user.email) : [];
                 setChallengePerUser(retosDeUsuario);
-                          
+
             };
 
             GetParticipations();
@@ -33,10 +35,10 @@ const UserPanel = ({ navigation }) => {
 
     // Envolviendo la funcion getScore dentro del useEffect y pasarle como dependencia,
     // Se va a ejecutar cada vez que challengePerUser actualize su estado
-    useEffect (() => {
+    useEffect(() => {
         function getScore() {
             let acum = 0;
-            
+
             for (let reto of challengePerUser) {
                 acum += parseInt(reto.score)
             }
@@ -44,33 +46,47 @@ const UserPanel = ({ navigation }) => {
             setFinalScore(acum);
             console.log("acum: ", acum);
         };
-        
-        getScore();        
+
+        getScore();
 
     }, [challengePerUser]);
 
     useEffect(() => {
 
         function getLvl() {
-            if(finalScore >= 0 ||  finalScore <= 5) {
+            if (finalScore >= 0 || finalScore <= 5) {
                 setUserLvl("Principiante");
-                
 
-            }else if(finalScore > 5 && finalScore <= 15) {
+
+            } else if (finalScore > 5 && finalScore <= 15) {
                 setUserLvl("Avanzado");
-                
 
-            }else {
+
+            } else {
                 setUserLvl("Sarpado en Reciclaje");
             }
         }
 
         getLvl();
 
-    },[finalScore]);
-
+    }, [finalScore]);
 
     return (
+        <ScrollView contentContainerStyle={styles.container}>
+            <Text style={styles.title}>
+                Nivel Alcanzado: <Text style={styles.value}>{userLvl}</Text>
+            </Text>
+            <Text style={styles.title}>
+                Retos Completados: <Text style={styles.value}>{challengePerUser.length}</Text>
+            </Text>
+            <Text style={styles.title}>
+                Puntos Acumulados: <Text style={styles.value}>{finalScore}</Text>
+            </Text>
+        </ScrollView>
+    );
+
+
+    /* return (
         
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
             
@@ -85,7 +101,7 @@ const UserPanel = ({ navigation }) => {
             </Text>
         </ScrollView>
 
-    );
+    ); */
 
 }
 

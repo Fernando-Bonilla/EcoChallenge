@@ -66,48 +66,48 @@ export function ListRetos() {
 
   return (
     //<View style={styleListRetos.container}>
-      <KeyboardAvoidingView behavior="padding" style={{flex: 1, padding: 20}}> 
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1, padding: 20 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
-      {reto.length > 0 ? (
-        reto.map((reto, index) => (
-          <View key={index} style={styleListRetos.cardWrapper}>
-            <Card
-              userName={reto.userName}
-              description={reto.description}
-              category={reto.category}
-              deadline={reto.deadline}
-              score={reto.score}
-            />
-            <View style={styleListRetos.buttonGroup}>
-              <Button
-                title="Eliminar"
-                customPress={() => confirmDelete(index)}
+        {reto.length > 0 ? (
+          reto.map((reto, index) => (
+            <View key={index} style={styleListRetos.cardWrapper}>
+              <Card
+                userName={reto.userName}
+                description={reto.description}
+                category={reto.category}
+                deadline={reto.deadline}
+                score={reto.score}
               />
-              <Button
-                title="Actualizar"
-                customPress={() =>
-                  navigation.navigate("updateRetos", {
-                    index: index,
-                    retoActual: reto,
-                  })
-                }
-              />
+              <View style={styleListRetos.buttonGroup}>
+                <Button
+                  title="Eliminar"
+                  customPress={() => confirmDelete(index)}
+                />
+                <Button
+                  title="Actualizar"
+                  customPress={() =>
+                    navigation.navigate("updateRetos", {
+                      index: index,
+                      retoActual: reto,
+                    })
+                  }
+                />
 
+              </View>
             </View>
-          </View>
-        ))
-      ) : (
-        <Text style={styleListRetos.emptyText}>
-          No hay retos para mostrar.
-        </Text>
-      )}
-      <Button
-        title="Agregar Reto"
-        customPress={() =>
-          navigation.navigate("formAlta")
-        }
-      />
-    </ScrollView>
+          ))
+        ) : (
+          <Text style={styleListRetos.emptyText}>
+            No hay retos para mostrar.
+          </Text>
+        )}
+        <Button
+          title="Agregar Reto"
+          customPress={() =>
+            navigation.navigate("formAlta")
+          }
+        />
+      </ScrollView>
     </KeyboardAvoidingView>
     //</View>
   );
