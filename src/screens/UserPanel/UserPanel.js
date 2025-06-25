@@ -22,7 +22,11 @@ const UserPanel = ({ navigation }) => {
     const screenWidth = Dimensions.get("window").width;
 
     const retosLabels = challengePerUser.map(r => r.reto);
-    const puntosData = challengePerUser.map(r => parseInt(r.score));
+    //const puntosData = challengePerUser.map(r => parseInt(r.score));
+    const puntosData = challengePerUser.map(r => {
+        const score = parseInt(r.score);
+        return isNaN(score) ? 0 : score;
+    });
 
     const chartData = {
         labels: retosLabels,
@@ -41,7 +45,7 @@ const UserPanel = ({ navigation }) => {
         labelColor: (opacity = 1) => `rgba(60, 60, 60, ${opacity})`,   // labels gris 
         style: {
             borderRadius: 8,
-        },        
+        },
         propsForLabels: {
             fontSize: 12,
         }
