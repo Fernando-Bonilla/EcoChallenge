@@ -5,6 +5,8 @@ import { useUser } from "../../Context/UserContext";
 import { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { BarChart } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
 
 import styles from "./UserPanel.styles";
 
@@ -14,6 +16,36 @@ const UserPanel = ({ navigation }) => {
     const [challengePerUser, setChallengePerUser] = useState([]);
     const [finalScore, setFinalScore] = useState(0);
     const [userLvl, setUserLvl] = useState("");
+
+
+    // Grafica
+    const screenWidth = Dimensions.get("window").width;
+
+    const retosLabels = challengePerUser.map(r => r.reto);
+    const puntosData = challengePerUser.map(r => parseInt(r.score));
+
+    const chartData = {
+        labels: retosLabels,
+        datasets: [
+            {
+                data: puntosData,
+            },
+        ],
+    };
+
+    const chartConfig = {
+        backgroundGradientFrom: "#ffffff",
+        backgroundGradientTo: "#ffffff",
+        decimalPlaces: 0,
+        color: (opacity = 1) => `rgba(80, 80, 80, ${opacity})`,       // barras gris 
+        labelColor: (opacity = 1) => `rgba(60, 60, 60, ${opacity})`,   // labels gris 
+        style: {
+            borderRadius: 8,
+        },        
+        propsForLabels: {
+            fontSize: 12,
+        }
+    };
 
     //Buscamos las participaciones del usuario
     useFocusEffect(
@@ -54,7 +86,7 @@ const UserPanel = ({ navigation }) => {
     useEffect(() => {
 
         function getLvl() {
-            if (finalScore >= 0 || finalScore <= 5) {
+            if (finalScore >= 0 && finalScore <= 5) {
                 setUserLvl("Principiante");
 
 
@@ -82,26 +114,25 @@ const UserPanel = ({ navigation }) => {
             <Text style={styles.title}>
                 Puntos Acumulados: <Text style={styles.value}>{finalScore}</Text>
             </Text>
+
+            <View style={{ alignItems: "center", marginTop: 20 }}>
+                <Text style={{ fontWeight: "bold", marginBottom: 10 }}>
+                    Puntos por Reto
+                </Text>
+                <BarChart
+                    data={chartData}
+                    width={screenWidth - 40}
+                    height={220}
+                    chartConfig={chartConfig}
+                    style={{ borderRadius: 16 }}
+                    fromZero={true}
+                    showValuesOnTopOfBars={true}
+                />
+            </View>
+
+
         </ScrollView>
     );
-
-
-    /* return (
-        
-        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
-            
-            <Text>
-                Nivel Alcanzado: {userLvl}
-            </Text>
-            <Text>
-                Retos Completados: {challengePerUser ? (challengePerUser.length) : 0}
-            </Text>
-            <Text>
-                Puntos Acumulados: {finalScore}
-            </Text>
-        </ScrollView>
-
-    ); */
 
 }
 

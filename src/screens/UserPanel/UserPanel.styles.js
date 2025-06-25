@@ -1,20 +1,10 @@
 import { StyleSheet } from "react-native";
 
-/* const styles = StyleSheet.create({
-
-    text: {
-
-    }
-
-});
-
-export default styles; */
-
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 20,
-        backgroundColor: '#f5f5f5', // color suave de fondo
+        backgroundColor: '#f5f5f5', 
     },
     title: {
         fontSize: 16,
