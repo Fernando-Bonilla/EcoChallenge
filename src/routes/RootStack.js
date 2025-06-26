@@ -20,6 +20,7 @@ import { useUser } from "../Context/UserContext";
 import { ListRetos } from "../screens/AltaRetos/listRetos";
 import UpdateRetoForm from "../screens/AltaRetos/updateRetos";
 import participation from "../screens/Participate/Participate";
+import UserPanel from "../screens/UserPanel/UserPanel";
 
 //const Stack = createNativeStackNavigator();
 const Stack = createStackNavigator();
@@ -27,7 +28,7 @@ const Stack = createStackNavigator();
 const RootStack = () => {
     const {user} = useUser();
 
-     console.log(AltaReto)
+    console.log(AltaReto)
 
     return(
         <NavigationContainer>
@@ -106,6 +107,13 @@ const RootStack = () => {
                     component={UpdateMateriales}
                     options={{
                         title: "Editar Material"
+                    }}
+                />
+                <Stack.Screen
+                    name="UserPanel"
+                    component={UserPanel}
+                    options={{
+                        title: "Estadisticas"
                     }}
                 />
 

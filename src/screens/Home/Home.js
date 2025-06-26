@@ -33,7 +33,11 @@ const Home = ({ navigation }) => {
           customPress={() => navigation.navigate("Participate")}
         />
         <Button
-          title="Configuraciones"
+          title="Estadisticas"
+          customPress={() => navigation.navigate("UserPanel")}
+        />  
+        <Button
+          title="Perfil"
           customPress={() => navigation.navigate("Settings")}
         />        
         <Button
