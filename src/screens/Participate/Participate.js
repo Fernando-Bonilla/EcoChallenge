@@ -81,7 +81,7 @@ const Participation = () => {
           user: user?.userName || "Desconocido",
           location: coords,
           date: new Date().toISOString(),
-          score: selected.score,
+          score: options.score,
         };
 
         const existentes = await AsyncStorage.getItem("participaciones");

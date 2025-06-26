@@ -8,7 +8,7 @@ import { KeyboardAvoidingView, ScrollView } from "react-native";
 const AltaReto = () => {
     const [userName, setuserName] = useState('');
     const [description, setdescription] = useState('');
-    const [category, setcategory] = useState('');
+    const [category, setcategory] = useStatae('');
     const [deadline, setdeadline] = useState('');
     const [score, setscore] = useState('');
 
@@ -87,7 +87,7 @@ const AltaReto = () => {
             clearFields();
 
         } catch {
-            console.error('NO FUNCIONA BRO:', error)
+            console.error('NO FUNCIONA XD:', error)
         }
     }
 
