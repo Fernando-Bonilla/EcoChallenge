@@ -70,7 +70,7 @@ const ListMateriales = ({ navigation }) => {
 
                         Alert.alert(" ",
                             "No se encontraron Materiales, ingrese nuevos para ver el listado aqui",
-                            [{ text: "OK", onPress: () => navigation.navigate("Home") }],
+                            [{ text: "OK", onPress: () => {} }], //navigation.navigate("Home")
                             { cancelable: false }
                         )
 
