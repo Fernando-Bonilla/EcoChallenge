@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, Alert, KeyboardAvoidingView, ScrollView } from "react-native";
+import InputText from "../../components/InputText/InputText";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import { useState } from "react";
@@ -8,9 +9,11 @@ import { useCallback } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { styleListRetos } from "./styleListRetos";
 
-export function ListRetos() {
+export function ListRetos({ navigation }) {
   const [reto, setReto] = useState([]);
-  const navigation = useNavigation();
+  const [searchText, setSerachText] = useState("");
+  const [retosFiltrados, setRetosFiltrados] = useState([]);
+  //const navigation = useNavigation();
 
   const confirmDelete = (indexToDelete) => {
     Alert.alert(
@@ -74,9 +77,17 @@ export function ListRetos() {
     //<View style={styleListRetos.container}>
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1, padding: 20 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
+        <InputText
+          maxLength={30}
+          minLength={1}
+          onChangeText={setSerachText}
+          placeHolder={"Buscar..."}
+          value={searchText}
+        />
         {reto.length > 0 ? (
           reto.map((reto, index) => (
             <View key={index} style={styleListRetos.cardWrapper}>
+
               <Card
                 userName={reto.userName}
                 description={reto.description}
