@@ -58,8 +58,10 @@ const UserPanel = ({ navigation }) => {
             const GetParticipations = async () => {
                 const data = await AsyncStorage.getItem("participaciones");
                 const participaciones = JSON.parse(data);
+                console.log(participaciones)
 
                 const retosDeUsuario = participaciones ? participaciones.filter((p) => p.user === user.email) : [];
+                console.log(retosDeUsuario)
                 setChallengePerUser(retosDeUsuario);
 
             };

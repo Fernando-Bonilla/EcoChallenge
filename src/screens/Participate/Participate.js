@@ -73,16 +73,18 @@ const Participation = () => {
         longitude: location.coords.longitude,
       };
 
-        const newParticipation = {
-          reto: selected,
-          comment: comment,
-          img: image,
-          user: user?.userName || "Desconocido",
-          location: coords,
-          date: new Date().toISOString(),
-          score: options.score,
-        };
+      const selectedReto = options.find((reto) => reto.userName === selected);
+      console.log( `selected: ${selectedReto}`);
 
+      const newParticipation = {
+        reto: selectedReto.userName,
+        comment: comment,
+        img: image,
+        user: user.email,
+        location: coords,
+        date: new Date().toISOString(),
+        score: selectedReto.score,
+      };
       
 
       const existentes = await AsyncStorage.getItem("participaciones");
@@ -114,14 +116,16 @@ const Participation = () => {
         onValueChange={(itemValue) => setSelected(itemValue)}
         style={stylesParticipate.picker}
       >
+        <Picker.Item label="Selecciona un reto" value="" />
         {options.map((item, index) => (
           <Picker.Item
-            label={item.userName}  //label={`${item.category} - ${item.description}`}
+            label={item.userName} 
             value={item.userName}
             key={index}
           />
         ))}
       </Picker>
+
         
       <TextInput
         placeholder="Agrega un comentario"

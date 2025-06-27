@@ -1,16 +1,25 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Alert } from "react-native";
+import { useState } from "react";
+import { Text, TextInput, Alert } from "react-native";
 import stylesForm from "./styleForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../../components/Button/Button";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Platform, TouchableOpacity } from 'react-native';
+
+
+
+
 
 const AltaReto = () => {
     const [userName, setuserName] = useState('');
     const [description, setdescription] = useState('');
-    const [category, setcategory] = useStatae('');
+    const [category, setcategory] = useState('');
     const [deadline, setdeadline] = useState('');
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
     const [score, setscore] = useState('');
+
 
     const clearFields = () => {       
         setuserName("");
@@ -34,6 +43,33 @@ const AltaReto = () => {
         }
         }
     };
+    
+    const formatDate = (date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`; // formato YYYY-MM-DD
+    };
+
+    const handleDateChange = (event, date) => {
+    setShowDatePicker(Platform.OS === 'ios');
+
+    if (date) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (date < today) {
+        Alert.alert("Fecha inválida", "No puedes seleccionar una fecha pasada.");
+        return;
+        }
+
+        setSelectedDate(date);
+        setdeadline(formatDate(date));
+    }
+    };
+
+
+
 
     const HandleSubmit = () => {
 
@@ -117,12 +153,18 @@ const AltaReto = () => {
                     onChangeText={setcategory}
                     /> 
                 <Text style={stylesForm.label}>Fecha Limite</Text>
-                <TextInput
-                    style={stylesForm.input}
-                    placeholder="Ej: 01/07/2025"
-                    value={deadline}
-                    onChangeText={setdeadline}            
+                <TouchableOpacity onPress={() => setShowDatePicker(true)} style={stylesForm.input}>
+                <Text>{selectedDate ? selectedDate.toLocaleDateString() : 'Selecciona una fecha'}</Text>
+                </TouchableOpacity>
+                {showDatePicker && (
+                <DateTimePicker
+                    value={selectedDate || new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={handleDateChange}
                 />
+                )}
+
                 <Text style={stylesForm.label}>Puntaje</Text>
                 <TextInput
                     style={stylesForm.input}
