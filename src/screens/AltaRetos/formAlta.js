@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Alert } from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import stylesForm from "./styleForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../../components/Button/Button";
