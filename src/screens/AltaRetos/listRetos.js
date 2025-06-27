@@ -48,9 +48,15 @@ export function ListRetos() {
         try {
           const items = await AsyncStorage.getItem("arrayRetos");
           if (items) {
-            const retosParseados = JSON.parse(items);
-            setReto(retosParseados);
             console.log("Contenido guardado bajo 'Retos':", items);
+            const retosParseados = JSON.parse(items);            
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0); // Quita hora, dejar solo día para evitar errores en fechas vigentes de retos
+              const retosFiltrados = retosParseados.filter((reto) => {
+                const fechaReto = new Date(reto.deadline); 
+                return fechaReto >= hoy;
+              });
+              setReto(retosFiltrados);
           } else {
             setReto([]);
             console.warn("No se encontró 'Retos' en AsyncStorage");

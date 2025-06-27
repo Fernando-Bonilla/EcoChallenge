@@ -42,7 +42,13 @@ const Participation = () => {
         const items = await AsyncStorage.getItem("arrayRetos");
         if (items) {
           const retosParseados = JSON.parse(items);
-          setOptions(retosParseados);
+          const hoy = new Date();
+          hoy.setHours(0, 0, 0, 0); // misma validacion que en listRetos, para obtener los retos vigentes
+            const retosFiltrados = retosParseados.filter((reto) => {
+              const fechaReto = new Date(reto.deadline); 
+              return fechaReto >= hoy;
+            });
+          setOptions(retosFiltrados);
           console.log("Contenido guardado bajo 'arrayRetos':", retosParseados);
         } else {
           console.warn("No se encontró 'arrayRetos' en AsyncStorage");
