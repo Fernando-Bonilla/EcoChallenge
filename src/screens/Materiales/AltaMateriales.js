@@ -5,10 +5,11 @@ import ImageComponent from "../../components/Image/Image";
 import { KeyboardAvoidingView, View } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import Button from "../../components/Button/Button";
-
 import { useState } from "react";
-import AsyncStorage, { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./AltaMateriales.styles";
+import { Picker } from '@react-native-picker/picker';
+
 
 const AltaMateriales = ({navigation}) => {
 
@@ -110,13 +111,16 @@ const AltaMateriales = ({navigation}) => {
                     maxLength={20}
                     value={name}
                 />
-                <InputText
-                    placeHolder="Plastico, Papel, Vidrio, etc"
-                    onChangeText={setCategory}
-                    minLength={3}
-                    maxLength={20}
-                    value={category}
-                />                
+                <Picker
+                    selectedValue={category}
+                    onValueChange={(itemValue) => setCategory(itemValue)}
+                    >
+                    <Picker.Item label="Seleccione una categoría..." value="" />
+                    <Picker.Item label="Plástico" value="plastico" />
+                    <Picker.Item label="Papel" value="papel" />
+                    <Picker.Item label="Electrónicos" value="electronicos" />
+                    <Picker.Item label="Vidrio" value="vidrio" />
+                </Picker>             
                 <TouchableOpacity onPress={pickImage} style={{ alignItems: "center", marginBottom: 20 }}>
                     {image ? (
                         <ImageComponent

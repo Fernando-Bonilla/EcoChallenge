@@ -8,7 +8,7 @@ import { Text } from "react-native";
 import { Alert } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import ImageComponent from "../../components/Image/Image";
-
+import { Picker } from '@react-native-picker/picker';
 import styles from "./UpdateMateriales.styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -103,12 +103,17 @@ const UpdateMateriales = ({navigation, route}) => {
                     onChangeText={setNewName}
                     value={newName}
                 />
-                <InputText
-                    onChangeText={setNewCategory}
-                    minLength={3}
-                    maxLength={20}
-                    value={newCategory}                                       
-                />
+                <Text style={styles.label}>Categoria</Text>
+                <Picker
+                    selectedValue={newCategory}
+                    onValueChange={(itemValue) => setNewCategory(itemValue)}
+                    >
+                    <Picker.Item label="Seleccione una categoría..." value="" />
+                    <Picker.Item label="Plástico" value="plastico" />
+                    <Picker.Item label="Papel" value="papel" />
+                    <Picker.Item label="Electrónicos" value="electronicos" />
+                    <Picker.Item label="Vidrio" value="vidrio" />
+                </Picker>
 
                 <TouchableOpacity onPress={pickImage} style={{ alignItems: "center", marginBottom: 20 }}>
                     {newImage ? (

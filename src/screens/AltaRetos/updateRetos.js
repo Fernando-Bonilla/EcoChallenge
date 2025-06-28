@@ -4,6 +4,8 @@ import stylesForm from "./styleForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+
 
 
 
@@ -124,12 +126,17 @@ const handleDateChange = (event, date) => {
         onChangeText={setDescription}
       />
       <Text style={stylesForm.label}>Categoria</Text>
-      <TextInput
-        style={stylesForm.input}
-        placeholder="Ej: Plástico, Papel, Electrónicos, etc."
-        value={category}
-        onChangeText={setCategory}
-      />
+      <Picker
+          selectedValue={category}
+          onValueChange={(itemValue) => setCategory(itemValue)}
+          style={stylesForm.input}
+          >
+          <Picker.Item label="Seleccione una categoría..." value="" />
+          <Picker.Item label="Plástico" value="plastico" />
+          <Picker.Item label="Papel" value="papel" />
+          <Picker.Item label="Electrónicos" value="electronicos" />
+          <Picker.Item label="Vidrio" value="vidrio" />
+      </Picker>
       <Text style={stylesForm.label}>Fecha Límite</Text>
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={stylesForm.input}>
         <Text>{selectedDate ? selectedDate.toLocaleDateString() : 'Selecciona una fecha'}</Text>

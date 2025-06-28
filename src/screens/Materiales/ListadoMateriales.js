@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import { useState } from "react";
 import { styleListMateriales } from "./ListadoMateriales.styles";
@@ -107,7 +106,7 @@ const ListMateriales = ({ navigation }) => {
                                 customPress={() => confirmDelete(index)}
                             />
                             <Button
-                                title="Editar"
+                                title="Actualizar"
                                 customPress={() =>
                                     navigation.navigate("UpdateMateriales", {
                                         index: index,

@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../../components/Button/Button";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
 import { Platform, TouchableOpacity } from 'react-native';
 
 
@@ -146,12 +147,17 @@ const AltaReto = () => {
                     onChangeText={setdescription}
                 />
                 <Text style={stylesForm.label}>Categoria</Text>
-                <TextInput
+                <Picker
+                    selectedValue={category}
+                    onValueChange={(itemValue) => setcategory(itemValue)}
                     style={stylesForm.input}
-                    placeholder="Ej: Plástico, Papel, Electrónicos, etc."
-                    value={category}
-                    onChangeText={setcategory}
-                    /> 
+                    >
+                    <Picker.Item label="Seleccione una categoría..." value="" />
+                    <Picker.Item label="Plástico" value="plastico" />
+                    <Picker.Item label="Papel" value="papel" />
+                    <Picker.Item label="Electrónicos" value="electronicos" />
+                    <Picker.Item label="Vidrio" value="vidrio" />
+                </Picker>
                 <Text style={stylesForm.label}>Fecha Limite</Text>
                 <TouchableOpacity onPress={() => setShowDatePicker(true)} style={stylesForm.input}>
                 <Text>{selectedDate ? selectedDate.toLocaleDateString() : 'Selecciona una fecha'}</Text>

@@ -56,14 +56,27 @@ const Register = ({navigation}) => {
             Alert.alert("Ingrese un email");
             return;
         }
+        // Validación del formato de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+        Alert.alert(
+            "Email inválido",
+            "Asegúrese de que el email tenga un formato correcto, como ejemplo@dominio.com"
+        );            return;
+        }
         if(!password) {
             Alert.alert("Ingrese una contraseña valida");
             return;
         }
-        /* if (!profileImage) {
-            Alert.alert("Seleccione una imagen");
+        // Validación de seguridad mínima
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+        if (!passwordRegex.test(password)) {
+            Alert.alert(
+                "Contraseña débil",
+                "La contraseña debe tener al menos 6 caracteres, una letra mayúscula, una minúscula y un número."
+            );
             return;
-        } */
+        }
 
         if(await AsyncStorage.getItem(email)) { // Esto no me gusta porque ya da informacion, pero no me queda otra
             console.log("Entra al chequeo email");
