@@ -20,25 +20,57 @@ const Register = ({navigation}) => {
     const [profileImage, setProfileImage] = useState(null);
 
     const pickImage = async () => {
+    Alert.alert(
+        "Seleccionar imagen",
+        "¿Desea elegir una foto de la galería o tomar una nueva?",
+        [
+            {
+                text: "Galería",
+                onPress: () => launchImagePicker('gallery'),
+            },
+            {
+                text: "Cámara",
+                onPress: () => launchImagePicker('camera'),
+            },
+            { text: "Cancelar", style: "cancel" },
+        ],
+        { cancelable: true }
+    );
+};
 
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        
-        if (status !== 'granted') {
-            Alert.alert("Permiso requerido", "Necesitamos permiso para acceder a tus fotos");
-            return;
-        }
+const launchImagePicker = async (source) => {
+    let permissionResult;
 
-        let result = await ImagePicker.launchImageLibraryAsync({
+    if (source === 'camera') {
+        permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    } else {
+        permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    }
+
+    if (permissionResult.status !== 'granted') {
+        Alert.alert("Permiso requerido", "Necesitamos permiso para acceder a la cámara o galería");
+        return;
+    }
+
+    let result = await (source === 'camera'
+        ? ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.5,
+        })
+        : ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1, 1], 
+            aspect: [1, 1],
             quality: 0.5,
-        });
+        })
+    );
 
-        if (!result.canceled && result.assets) {
-            setProfileImage(result.assets[0].uri);
-        }
-    };
+    if (!result.canceled && result.assets) {
+        setProfileImage(result.assets[0].uri);
+    }
+};
+
 
     const clearFields = () => {
         setUserName("");
