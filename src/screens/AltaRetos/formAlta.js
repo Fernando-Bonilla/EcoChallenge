@@ -22,90 +22,88 @@ const AltaReto = () => {
     const [score, setscore] = useState('');
 
 
-    const clearFields = () => {       
+    const clearFields = () => {
         setuserName("");
         setdescription("");
         setcategory("");
         setdeadline("");
         setscore("");
+        setSelectedDate(null);
     }
 
     const handleChange = (text) => {
         const numericValue = text.replace(/[^0-9]/g, '');
 
         if (numericValue === '') {
-        setscore('');
+            setscore('');
         } else {
-        const number = parseInt(numericValue);
-        if (number >= 1 && number <= 10) {
-            setscore(numericValue);
-        } else if (number > 10) {
-            setscore('10'); // Limita a 10
-        }
+            const number = parseInt(numericValue);
+            if (number >= 1 && number <= 10) {
+                setscore(numericValue);
+            } else if (number > 10) {
+                setscore('10'); // Limita a 10
+            }
         }
     };
-    
+
     const formatDate = (date) => {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${year}-${month}-${day}`; // formato YYYY-MM-DD
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${year}-${month}-${day}`; // formato YYYY-MM-DD
     };
 
     const handleDateChange = (event, date) => {
-    setShowDatePicker(Platform.OS === 'ios');
+        setShowDatePicker(Platform.OS === 'ios');
 
-    if (date) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        if (date) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-        if (date < today) {
-        Alert.alert("Fecha inválida", "No puedes seleccionar una fecha pasada.");
-        return;
+            if (date < today) {
+                Alert.alert("Fecha inválida", "No puedes seleccionar una fecha pasada.");
+                return;
+            }
+
+            setSelectedDate(date);
+            setdeadline(formatDate(date));
         }
-
-        setSelectedDate(date);
-        setdeadline(formatDate(date));
-    }
     };
-
-
-
 
     const HandleSubmit = () => {
 
-    if (!userName) {
-        Alert.alert("Ingresa el nombre del reto");
-        return;
-    }
-    if (!description) {
-        Alert.alert("Agrega una descripción del reto");
-        return;
-    }
-    if (!category) {
-        Alert.alert("Agrega a que categoria corresponde el reto");
-        return;
-    }
-    if (!deadline) {
-        Alert.alert("Ingresa una fecha");
-        return;
-    }
-    if (!score) {
-        Alert.alert("Agrega un puntaje");
-        return;
-    }
-    const nuevoReto = {
-        userName,
-        description,
-        category,
-        deadline,
-        score,
+        if (!userName) {
+            Alert.alert("Ingresa el nombre del reto");
+            return;
+        }
+        if (!description) {
+            Alert.alert("Agrega una descripción del reto");
+            return;
+        }
+        if (!category) {
+            Alert.alert("Agrega a que categoria corresponde el reto");
+            return;
+        }
+        if (!deadline) {
+            Alert.alert("Ingresa una fecha");
+            return;
+        }
+        if (!score) {
+            Alert.alert("Agrega un puntaje");
+            return;
+        }
+        const nuevoReto = {
+            userName,
+            description,
+            category,
+            deadline,
+            score,
+        };
+
+        saveReto(nuevoReto);
     };
 
-    saveReto(nuevoReto);
-    };
 
-   
     const saveReto = async (reto) => {
 
         try {
@@ -128,15 +126,15 @@ const AltaReto = () => {
         }
     }
 
-    return (          
-        <KeyboardAvoidingView behavior="padding" style={{flex: 1, padding: 20}}> 
+    return (
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1, padding: 20 }}>
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
                 <Text style={stylesForm.label}>Nombre del Reto</Text>
                 <TextInput
-                style={stylesForm.input}
-                placeholder="Ej: Reto de reciclaje"
-                value={userName}
-                onChangeText={setuserName}
+                    style={stylesForm.input}
+                    placeholder="Ej: Reto de reciclaje"
+                    value={userName}
+                    onChangeText={setuserName}
                 />
 
                 <Text style={stylesForm.label}>Descripción</Text>
@@ -151,7 +149,7 @@ const AltaReto = () => {
                     selectedValue={category}
                     onValueChange={(itemValue) => setcategory(itemValue)}
                     style={stylesForm.input}
-                    >
+                >
                     <Picker.Item label="Seleccione una categoría..." value="" />
                     <Picker.Item label="Plástico" value="plastico" />
                     <Picker.Item label="Papel" value="papel" />
@@ -160,15 +158,15 @@ const AltaReto = () => {
                 </Picker>
                 <Text style={stylesForm.label}>Fecha Limite</Text>
                 <TouchableOpacity onPress={() => setShowDatePicker(true)} style={stylesForm.input}>
-                <Text>{selectedDate ? selectedDate.toLocaleDateString() : 'Selecciona una fecha'}</Text>
+                    <Text>{selectedDate ? selectedDate.toLocaleDateString() : 'Selecciona una fecha'}</Text>
                 </TouchableOpacity>
                 {showDatePicker && (
-                <DateTimePicker
-                    value={selectedDate || new Date()}
-                    mode="date"
-                    display="default"
-                    onChange={handleDateChange}
-                />
+                    <DateTimePicker
+                        value={selectedDate || new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={handleDateChange}
+                    />
                 )}
 
                 <Text style={stylesForm.label}>Puntaje</Text>
@@ -177,9 +175,9 @@ const AltaReto = () => {
                     placeholder="Escala de 1 al 10"
                     value={score}
                     onChangeText={handleChange}
-                    keyboardType="numeric"   
-                    maxLength={2}    
-                    
+                    keyboardType="numeric"
+                    maxLength={2}
+
                 />
                 <Button
                     title="Guardar" customPress={HandleSubmit}
@@ -187,7 +185,7 @@ const AltaReto = () => {
                 </Button>
             </ScrollView>
         </KeyboardAvoidingView>
-   
+
     );
 };
 

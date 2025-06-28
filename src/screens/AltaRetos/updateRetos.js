@@ -1,40 +1,43 @@
 import { useState } from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
+import { View, Text, TextInput, Button, Alert, KeyboardAvoidingView, ScrollView } from "react-native";
+
 import stylesForm from "./styleForm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-
-
-
-
 const UpdateRetoForm = ({ route, navigation }) => {
 
-    const updateRetoInStorage = async (indexUpdate, newData) => {
-    try {
-        const arrayRetos = await AsyncStorage.getItem('arrayRetos');
-        const retosParseados = arrayRetos ? JSON.parse(arrayRetos) : [];
+  const updateRetoInStorage = async (indexUpdate, newData) => {
 
-        if (indexUpdate < 0 || indexUpdate >= retosParseados.length) {
+    try {
+      const arrayRetos = await AsyncStorage.getItem('arrayRetos');
+      const retosParseados = arrayRetos ? JSON.parse(arrayRetos) : [];
+
+      if (indexUpdate < 0 || indexUpdate >= retosParseados.length) {
         Alert.alert("Índice inválido para actualizar");
         return false;
-        }
+      }
 
-        const nuevosRetos = retosParseados.map((item, index) =>
+      const nuevosRetos = retosParseados.map((item, index) =>
         index === indexUpdate ? { ...item, ...newData } : item
-        );
-        console.log(nuevosRetos)
-        await AsyncStorage.setItem('arrayRetos', JSON.stringify(nuevosRetos));
-        Alert.alert("Reto actualizado con éxito");
-        return true;
-    } catch (error) {
-        console.error("Error al actualizar el reto:", error);
-        Alert.alert("Ocurrió un error al actualizar el reto");
-        return false;
+      );
+
+      console.log(nuevosRetos)
+      await AsyncStorage.setItem('arrayRetos', JSON.stringify(nuevosRetos));
+      console.log("Reto updateado: ", nuevosRetos)
+      Alert.alert("Reto actualizado con éxito");
+      return true;
+
+    }catch (error) {
+
+      console.error("Error al actualizar el reto:", error);
+      Alert.alert("Ocurrió un error al actualizar el reto");
+      return false;
+
     }
-    };
+  };
 
   // Recibimos el index y los datos actuales del reto a editar
   const { index, retoActual } = route.params;
@@ -46,7 +49,6 @@ const UpdateRetoForm = ({ route, navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [score, setScore] = useState(retoActual.score);
-  
 
   const handleChange = (text) => {
     const numericValue = text.replace(/[^0-9]/g, '');
@@ -64,30 +66,28 @@ const UpdateRetoForm = ({ route, navigation }) => {
   };
 
   const formatDate = (date) => {
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear();
-  return `${year}-${month}-${day}`; // formato YYYY-MM-DD
-};
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`; // formato YYYY-MM-DD
+  };
 
-const handleDateChange = (event, date) => {
-  setShowDatePicker(Platform.OS === 'ios');
+  const handleDateChange = (event, date) => {
+    setShowDatePicker(Platform.OS === 'ios');
 
-  if (date) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    if (date) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    if (date < today) {
-      Alert.alert("Fecha inválida", "No puedes seleccionar una fecha pasada.");
-      return;
+      if (date < today) {
+        Alert.alert("Fecha inválida", "No puedes seleccionar una fecha pasada.");
+        return;
+      }
+
+      setSelectedDate(date);
+      setDeadline(formatDate(date));
     }
-
-    setSelectedDate(date);
-    setDeadline(formatDate(date));
-  }
-};
-
-
+  };
 
   const handleSubmit = async () => {
     if (!userName || !description || !category || !deadline || !score) {
@@ -105,63 +105,65 @@ const handleDateChange = (event, date) => {
 
     const success = await updateRetoInStorage(index, nuevoReto);
     if (success) {
-      navigation.goBack(); // Volver a la lista tras actualizar
+      navigation.goBack(); // Vuelve a la lista tras actualizar
     }
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={stylesForm.label}>Nombre del Reto</Text>
-      <TextInput
-        style={stylesForm.input}
-        placeholder="Ej: Reto de reciclaje"
-        value={userName}
-        onChangeText={setUserName}
-      />
-      <Text style={stylesForm.label}>Descripción</Text>
-      <TextInput
-        style={stylesForm.input}
-        placeholder="Ej: Recicla 3 botellas"
-        value={description}
-        onChangeText={setDescription}
-      />
-      <Text style={stylesForm.label}>Categoria</Text>
-      <Picker
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1, padding: 20 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
+        <Text style={stylesForm.label}>Nombre del Reto</Text>
+        <TextInput
+          style={stylesForm.input}
+          placeholder="Ej: Reto de reciclaje"
+          value={userName}
+          onChangeText={setUserName}
+        />
+        <Text style={stylesForm.label}>Descripción</Text>
+        <TextInput
+          style={stylesForm.input}
+          placeholder="Ej: Recicla 3 botellas"
+          value={description}
+          onChangeText={setDescription}
+        />
+        <Text style={stylesForm.label}>Categoria</Text>
+        <Picker
           selectedValue={category}
           onValueChange={(itemValue) => setCategory(itemValue)}
           style={stylesForm.input}
-          >
+        >
           <Picker.Item label="Seleccione una categoría..." value="" />
           <Picker.Item label="Plástico" value="plastico" />
           <Picker.Item label="Papel" value="papel" />
           <Picker.Item label="Electrónicos" value="electronicos" />
           <Picker.Item label="Vidrio" value="vidrio" />
-      </Picker>
-      <Text style={stylesForm.label}>Fecha Límite</Text>
-      <TouchableOpacity onPress={() => setShowDatePicker(true)} style={stylesForm.input}>
-        <Text>{selectedDate ? selectedDate.toLocaleDateString() : 'Selecciona una fecha'}</Text>
-      </TouchableOpacity>
+        </Picker>
+        <Text style={stylesForm.label}>Fecha Límite</Text>
+        <TouchableOpacity onPress={() => setShowDatePicker(true)} style={stylesForm.input}>
+          <Text>{selectedDate ? selectedDate.toLocaleDateString() : 'Selecciona una fecha'}</Text>
+        </TouchableOpacity>
 
-      {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate || new Date()}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate || new Date()}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
+
+        <Text style={stylesForm.label}>Puntaje</Text>
+        <TextInput
+          style={stylesForm.input}
+          placeholder="Escala de 1 al 10"
+          value={score}
+          onChangeText={handleChange}
+          keyboardType="numeric"
+          maxLength={2}
         />
-      )}
-
-      <Text style={stylesForm.label}>Puntaje</Text>
-      <TextInput
-        style={stylesForm.input}
-        placeholder="Escala de 1 al 10"
-        value={score}
-        onChangeText={handleChange}
-        keyboardType="numeric"
-        maxLength={2}
-      />
-      <Button title="Guardar" onPress={handleSubmit} />
-    </View>
+        <Button title="Guardar" onPress={handleSubmit} />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

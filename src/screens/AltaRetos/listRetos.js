@@ -3,7 +3,7 @@ import { View, Text, Alert, KeyboardAvoidingView, ScrollView } from "react-nativ
 import InputText from "../../components/InputText/InputText";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
 import { useFocusEffect } from '@react-navigation/native';
@@ -11,9 +11,16 @@ import { styleListRetos } from "./styleListRetos";
 
 export function ListRetos({ navigation }) {
   const [reto, setReto] = useState([]);
-  const [searchText, setSerachText] = useState("");
-  const [retosFiltrados, setRetosFiltrados] = useState([]);
-  //const navigation = useNavigation();
+  const [searchText, setSearchText] = useState("");
+
+  const retosFiltrados = reto.filter(r =>
+    r.userName?.toLowerCase().includes(searchText.toLowerCase()) ||
+    r.category?.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const resultadosParaMostrar = searchText.trim() === ""
+    ? reto
+    : retosFiltrados;
 
   const confirmDelete = (indexToDelete) => {
     Alert.alert(
@@ -35,15 +42,17 @@ export function ListRetos({ navigation }) {
 
   const handleDelete = async (indexToDelete) => {
     try {
+
       const nuevosRetos = reto.filter((_, index) => index !== indexToDelete);
       setReto(nuevosRetos);
       await AsyncStorage.setItem('arrayRetos', JSON.stringify(nuevosRetos));
       Alert.alert('Reto eliminado con éxito');
+
     } catch (error) {
       console.error('Error al eliminar el reto:', error);
+
     }
   };
-
 
   useFocusEffect(
     useCallback(() => {
@@ -52,14 +61,14 @@ export function ListRetos({ navigation }) {
           const items = await AsyncStorage.getItem("arrayRetos");
           if (items) {
             console.log("Contenido guardado bajo 'Retos':", items);
-            const retosParseados = JSON.parse(items);            
+            const retosParseados = JSON.parse(items);
             const hoy = new Date();
             hoy.setHours(0, 0, 0, 0); // Quita hora, dejar solo día para evitar errores en fechas vigentes de retos
-              const retosFiltrados = retosParseados.filter((reto) => {
-                const fechaReto = new Date(reto.deadline); 
-                return fechaReto >= hoy;
-              });
-              setReto(retosFiltrados);
+            const retosFiltrados = retosParseados.filter((reto) => {
+              const fechaReto = new Date(reto.deadline);
+              return fechaReto >= hoy;
+            });
+            setReto(retosFiltrados);
           } else {
             setReto([]);
             console.warn("No se encontró 'Retos' en AsyncStorage");
@@ -73,6 +82,8 @@ export function ListRetos({ navigation }) {
     }, [])
   );
 
+
+
   return (
     //<View style={styleListRetos.container}>
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1, padding: 20 }}>
@@ -80,12 +91,12 @@ export function ListRetos({ navigation }) {
         <InputText
           maxLength={30}
           minLength={1}
-          onChangeText={setSerachText}
+          onChangeText={setSearchText}
           placeHolder={"Buscar..."}
           value={searchText}
         />
-        {reto.length > 0 ? (
-          reto.map((reto, index) => (
+        {resultadosParaMostrar.length > 0 ? ( // reto.length > 0 ?
+          resultadosParaMostrar.map((reto, index) => (
             <View key={index} style={styleListRetos.cardWrapper}>
 
               <Card
@@ -115,7 +126,10 @@ export function ListRetos({ navigation }) {
           ))
         ) : (
           <Text style={styleListRetos.emptyText}>
-            No hay retos para mostrar.
+            {searchText.trim() === ""
+              ? "No hay retos para mostrar."
+              : "No existen coincidencias con la búsqueda."
+            }
           </Text>
         )}
         <Button
