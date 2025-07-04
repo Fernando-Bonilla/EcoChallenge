@@ -90,6 +90,7 @@ const Participation = () => {
         location: coords,
         date: new Date().toISOString(),
         score: selectedReto.score,
+        status: "Pendiente",
       };
       
 

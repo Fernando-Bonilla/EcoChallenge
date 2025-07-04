@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
+import { ScrollView } from "react-native";
 import Button from "../../components/Button/Button";
 import styles from "./Home.styles";
 import { useUser } from "../../Context/UserContext";
+import Card from "../../components/Card/Card";
 
 const Home = ({ navigation }) => {
   const { user, setUser } = useUser();
@@ -13,6 +16,8 @@ const Home = ({ navigation }) => {
   };
 
   return (
+    // (user.userName ===! "admin") ?
+
     <View style={styles.container}>
       {/* Contenedor de botones superiores */}
       <View style={styles.topButtons}>
@@ -47,6 +52,33 @@ const Home = ({ navigation }) => {
         />
       </View>
     </View>
+    /* :
+    (<KeyboardAvoidingView behavior="padding" style={{ flex: 1, padding: 20 }}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
+            <Card
+                userName={reto.userName}
+                description={reto.description}
+                category={reto.category}
+                deadline={reto.deadline}
+                score={reto.score}
+              />
+              <View style={styleListRetos.buttonGroup}>
+                <Button
+                  title="Aprobar"
+                  customPress={() => confirmDelete(index)}
+                />
+                <Button
+                  title="Rechazar"
+                  customPress={() =>
+                    navigation.navigate("updateRetos", {
+                      index: index,
+                      retoActual: reto,
+                    })
+                  }
+                />
+                </View>
+          </ScrollView>
+      </KeyboardAvoidingView>) */
   );
 };
 
