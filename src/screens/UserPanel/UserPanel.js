@@ -51,17 +51,19 @@ const UserPanel = ({ navigation }) => {
         }
     };
 
-    //Buscamos las participaciones del usuario
+    //Buscamos las participaciones aprovadas del usuario
     useFocusEffect(
         useCallback(() => {
 
             const GetParticipations = async () => {
                 const data = await AsyncStorage.getItem("participaciones");
-                const participaciones = JSON.parse(data);
-                console.log(participaciones)
+                const participaciones = data ? JSON.parse(data) : [];
 
-                const retosDeUsuario = participaciones ? participaciones.filter((p) => p.user === user.email) : [];
-                console.log(retosDeUsuario)
+                //console.log("***** Participaciones por user ****")
+                //console.log("Participaciones por user", participaciones);
+
+                const retosDeUsuario = participaciones ? participaciones.filter((p) => p.user === user.email && p.status === "Aprobado") : [];
+                //console.log(retosDeUsuario)
                 setChallengePerUser(retosDeUsuario);
 
             };
@@ -82,7 +84,7 @@ const UserPanel = ({ navigation }) => {
             }
 
             setFinalScore(acum);
-            console.log("acum: ", acum);
+            //console.log("acum: ", acum);
         };
 
         getScore();
