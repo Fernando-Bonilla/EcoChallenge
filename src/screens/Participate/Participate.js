@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView, Alert } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,26 +16,59 @@ const Participation = () => {
   const [image, setImage] = useState("");
 
   const pickImage = async () => {
+    Alert.alert(
+      "Seleccionar imagen",
+      "¿Desea elegir una foto de la galería o tomar una nueva?",
+      [
+        {
+          text: "Galería",
+          onPress: () => launchImagePicker('gallery'),
+        },
+        {
+          text: "Cámara",
+          onPress: () => launchImagePicker('camera'),
+        },
+        { text: "Cancelar", style: "cancel" },
+      ],
+      { cancelable: true }
+    );
+  }
 
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const launchImagePicker = async (source) => {
+    let permissionResult;
 
-    if (status !== 'granted') {
-      Alert.alert("Permiso requerido", "Necesitamos permiso para acceder a tus fotos");
+    if (source === 'camera') {
+      permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+      console.log('Permiso cámara:', permissionResult);
+    } else {
+      permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      console.log('Permiso galeria:', permissionResult);
+    }
+
+    if (permissionResult.status !== 'granted') {
+      Alert.alert("Permiso requerido", "Necesitamos permiso para acceder a la cámara o galería");
       return;
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.5,
-    });
+    let result = await (source === 'camera'
+      ? ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+      })
+      : ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+      })
+    );
 
     if (!result.canceled && result.assets) {
       setImage(result.assets[0].uri);
     }
   };
-
+  
   useEffect(() => {
     const cargarRetos = async () => {
       try {
@@ -44,10 +77,10 @@ const Participation = () => {
           const retosParseados = JSON.parse(items);
           const hoy = new Date();
           hoy.setHours(0, 0, 0, 0); // misma validacion que en listRetos, para obtener los retos vigentes
-            const retosFiltrados = retosParseados.filter((reto) => {
-              const fechaReto = new Date(reto.deadline); 
-              return fechaReto >= hoy;
-            });
+          const retosFiltrados = retosParseados.filter((reto) => {
+            const fechaReto = new Date(reto.deadline);
+            return fechaReto >= hoy;
+          });
           setOptions(retosFiltrados);
           console.log("Contenido guardado bajo 'arrayRetos':", retosParseados);
         } else {
@@ -80,7 +113,7 @@ const Participation = () => {
       };
 
       const selectedReto = options.find((reto) => reto.userName === selected);
-      console.log( `selected: ${selectedReto}`);
+      console.log(`selected: ${selectedReto}`);
 
       const newParticipation = {
         reto: selectedReto.userName,
@@ -92,7 +125,7 @@ const Participation = () => {
         score: selectedReto.score,
         status: "Pendiente",
       };
-      
+
 
       const existentes = await AsyncStorage.getItem("participaciones");
       const participaciones = existentes ? JSON.parse(existentes) : [];
@@ -114,51 +147,51 @@ const Participation = () => {
 
   return (
     //<View style={stylesParticipate.container}>
-      <KeyboardAvoidingView behavior="padding" style={{flex: 1, padding: 20}}> 
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1, padding: 20 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
-      <Text style={stylesParticipate.title}>Participación de Retos</Text>
+        <Text style={stylesParticipate.title}>Participación de Retos</Text>
 
-      <Picker
-        selectedValue={selected}
-        onValueChange={(itemValue) => setSelected(itemValue)}
-        style={stylesParticipate.picker}
-      >
-        <Picker.Item label="Selecciona un reto" value="" />
-        {options.map((item, index) => (
-          <Picker.Item
-            label={item.userName} 
-            value={item.userName}
-            key={index}
-          />
-        ))}
-      </Picker>
+        <Picker
+          selectedValue={selected}
+          onValueChange={(itemValue) => setSelected(itemValue)}
+          style={stylesParticipate.picker}
+        >
+          <Picker.Item label="Selecciona un reto" value="" />
+          {options.map((item, index) => (
+            <Picker.Item
+              label={item.userName}
+              value={item.userName}
+              key={index}
+            />
+          ))}
+        </Picker>
 
-        
-      <TextInput
-        placeholder="Agrega un comentario"
-        value={comment}
-        onChangeText={(text) => setComment(text)}
-        style={stylesParticipate.input}
-      />
 
-      <TouchableOpacity onPress={pickImage} style={stylesParticipate.imagePickerContainer}>
-        {image ? (
-          <ImageComponent
-            source={{ uri: image }}
-            style={stylesParticipate.imagePreview}
-          />
-        ) : (
-          <View style={stylesParticipate.placeholderImage}>
-            <Text>Foto</Text>
-          </View>
-        )}
-      </TouchableOpacity>
+        <TextInput
+          placeholder="Agrega un comentario"
+          value={comment}
+          onChangeText={(text) => setComment(text)}
+          style={stylesParticipate.input}
+        />
 
-      <TouchableOpacity onPress={handleSubmit} style={stylesParticipate.submitButton}>
-        <Text style={stylesParticipate.submitText}>Enviar Participación</Text>
-      </TouchableOpacity>
-    
-    </ScrollView>
+        <TouchableOpacity onPress={pickImage} style={stylesParticipate.imagePickerContainer}>
+          {image ? (
+            <ImageComponent
+              source={{ uri: image }}
+              style={stylesParticipate.imagePreview}
+            />
+          ) : (
+            <View style={stylesParticipate.placeholderImage}>
+              <Text>Foto</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={handleSubmit} style={stylesParticipate.submitButton}>
+          <Text style={stylesParticipate.submitText}>Enviar Participación</Text>
+        </TouchableOpacity>
+
+      </ScrollView>
     </KeyboardAvoidingView>
     //</View>
   );
